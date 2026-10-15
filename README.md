@@ -22,9 +22,12 @@ portfolio while I build the skills.
 | Folder | What's in it |
 |---|---|
 | **learn/** | The lessons, in the order to work through them (START-HERE.md). |
-| **code/** | `mine/` — code I wrote. `useful/` — snippets I collected and reuse (credited). `local/` — my automation scripts (note, newfix, rename, folders). |
+| **code/** | `mine/` — code I wrote. `useful/` — snippets I collected and reuse (credited). `local/` — my automation scripts (logbook tickets: newentry, worklog, resolve; plus note, rename, folders). |
 | **infra/** | Notes by ops topic: networking, containers, security, os, cloud. |
-| **knowledge/** | `cheatsheets/`, `notes/` (my guides), `documents/` (links), `cert-prep/`. |
+| **knowledge/** | Logbook entries (`troubleshooting/`, `installs/`, `projects/`, `learning/`) plus `cheatsheets/`, `notes/`, `documents/`, `cert-prep/`. |
+| **LOGBOOK.md** | Every entry, sorted by date, status, type, language and branch (auto-built). |
+| **OPEN.md** | My live to-do: every ticket I've started and not resolved, with clickable links (auto-built). |
+| **JACKET.md** | Lessons learned, grouped by technology, linked to the work (auto-built). |
 | **ai/** | AI tooling notes (later). |
 | **SKILLS.md** | The bigger skills roadmap toward the job. |
 

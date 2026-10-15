@@ -1,14 +1,26 @@
-<!-- Quick entry. Copy me, replace the XXX, delete this line.
-     cp knowledge/troubleshooting/_quick.md "knowledge/troubleshooting/$(date +%F)-short-title.md" -->
+---
+type: __TYPE__
+title: __TITLE__
+date: __DATE__
+branch: __BRANCH__
+tech: __TECH__
+status: open
+opened: __DATE__
+closed:
+tags: []
+summary: XXX
+lesson: XXX
+---
 
-> **what:** XXX
-> **tags:** XXX
-> **last-used:** YYYY-MM-DD   <!-- change MM and DD -->
+# __TITLE__
 
-# XXX — short title
+<!-- Quick entry: fill the XXX. Save: bash code/local/worklog.sh "note"  Close: bash code/local/resolve.sh -->
 
-**One line (for interviews):** "XXX broke — I XXX and XXX (result)."
+**One line (for interviews):** XXX broke - I XXX, and XXX (the result).
 
 - **Issue:** XXX
 - **Fix:** XXX
 - **Learned:** XXX
+
+## Work log
+- __DATE__ - opened

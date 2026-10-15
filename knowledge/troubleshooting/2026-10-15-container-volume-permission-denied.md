@@ -1,7 +1,16 @@
-> **what:** a container couldn't write to its mounted volume — "permission denied"
-> **status:** solved
-> **tags:** docker, containers, permissions, uid, volumes
-> **last-used:** 2026-10-15
+---
+type: troubleshooting
+title: Container volume permission denied
+date: 2026-10-15
+branch: main
+tech: [docker, linux]
+status: resolved
+opened: 2026-10-15
+closed: 2026-10-15
+tags: [permissions, uid, volumes]
+summary: A container couldn't write to its bind-mounted volume; fixed a UID mismatch.
+lesson: Container permission errors are usually a UID/GID mismatch - compare the numbers with id and ls -ln instead of reaching for chmod 777.
+---
 
 # Container can't write to its bind-mounted volume
 

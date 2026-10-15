@@ -14,7 +14,10 @@ Everything in this repo and how to use it. Written 2026-10-15.
 |---|---|
 | `learn/` | The lessons, in order (start at `learn/START-HERE.md`). |
 | `code/` | `mine/` = code I wrote · `useful/` = snippets I reuse · `local/` = automation tools. |
-| `knowledge/` | `cheatsheets/`, `notes/`, `troubleshooting/`, `daily-log/`, `documents/`, `cert-prep/`. |
+| `knowledge/` | Logbook entries: `troubleshooting/`, `installs/`, `projects/`, `learning/`. Plus `cheatsheets/`, `notes/`, `daily-log/`, `documents/`, `cert-prep/`. |
+| `LOGBOOK.md` | Every logbook entry, sorted by date, status, type, language and branch. Built automatically. |
+| `OPEN.md` | Live list of every open ticket (on any branch), each linked to its entry and pull request. Built automatically. |
+| `JACKET.md` | My career jacket: every lesson learned, grouped by technology, linked to the work. Built automatically. |
 | `infra/` | Notes by ops topic (networking, etc.). |
 | `PORTFOLIO.md` | My professional page, browsable by skill. |
 | `TAGS.md` | Click a tag to see every note with it. |
@@ -31,13 +34,47 @@ Everything in this repo and how to use it. Written 2026-10-15.
 ## 2. My code
 - **`code/mine/`** — scripts I wrote. **`code/useful/`** — stuff I copied and reuse (credit it in `SOURCES.md`).
 
-## 3. Notes & capture (fast → full)
-Pick the size that fits:
-- **Quick note (fastest):** add one tagged line to **`knowledge/daily-log/quick-notes.md`**.
-- **Small fix:** copy **`knowledge/troubleshooting/_quick.md`** (Issue / Fix / Learned).
-- **Full write-up:** copy **`knowledge/troubleshooting/_template.md`**.
-- **End of day:** copy **`knowledge/daily-log/_daily-template.md`**.
-- Short scannable list of fixes: the table in **`knowledge/troubleshooting/README.md`**.
+## 3. The logbook (tickets)
+Every piece of real work gets an entry, and every entry works like a ticket:
+**one entry = one branch = one pull request.** Entries never go straight onto `main`;
+they get there by merging. `LOGBOOK.md` and `JACKET.md` rebuild themselves after each merge.
+
+**Pick the type:**
+| Type | Use it for | Folder |
+|---|---|---|
+| `troubleshooting` | Something broke and I worked out why (full write-up) | `knowledge/troubleshooting/` |
+| `quick` | A small fix: Issue / Fix / Learned | `knowledge/troubleshooting/` |
+| `install` | Setting up or installing something new | `knowledge/installs/` |
+| `project` | A bigger piece of work with steps and a goal | `knowledge/projects/` |
+| `learning` | Something I studied | `knowledge/learning/` |
+
+**The ticket flow:**
+| Step | Command | What happens |
+|---|---|---|
+| Open | `bash code/local/newentry.sh <type> <short-title> [tech ...]` | Makes branch `<type>/<short-title>` (if I'm on main), the dated entry, pushes it, prints a link. I open a **draft** pull request from that link - that's my open ticket. |
+| Save for the day | `bash code/local/worklog.sh "what I did"` | Adds a dated line to the Work log, status in-progress, pushes. Work is safe even if unfinished. |
+| Come back later | `git switch <type>/<short-title> && git pull` | Pick up where I left off. |
+| Stuck | `bash code/local/worklog.sh --blocked "waiting on X"` | Status blocked. I can still merge so it's on record (shows under Open). |
+| Resolve | `bash code/local/resolve.sh` | Checks no XXX is left, sets resolved + closed date, pushes. Then I click **Ready for review** and **Merge**. |
+
+**See everything I have open:** [OPEN.md](OPEN.md) - rebuilt whenever I push to a ticket branch
+or a pull request opens, closes or merges. Click a ticket to open it.
+
+**Hit a problem in the middle of a project?** While on the project branch, run
+`newentry.sh troubleshooting ...` - it rides on the same branch and merges with it.
+(`worklog.sh` and `resolve.sh` then need `--file <path>` to know which entry you mean.)
+
+**Smaller than a ticket:** a one-line note still goes straight in:
+`bash code/local/note.sh "did a thing #tag"` -> `knowledge/daily-log/quick-notes.md`.
+End-of-day recap: `knowledge/daily-log/_daily-template.md`.
+
+**Tags (the words after the title):** any word works - `sso`, `authelia`, `ipv6`, `docker`,
+`python`. Each becomes its own section in the logbook's **By topic** view and in the
+career jacket. Programming languages (python, rust, bash, powershell, go, sql...) also
+show up in **By language** on their own. One word per tag, dashes for two words
+(`reverse-proxy`), keep the same spelling each time. A language it doesn't know? Add a
+`lang: [zig]` line to the entry's top block. Example:
+`bash code/local/newentry.sh install sso-setup authelia sso oidc`
 
 ## 4. Tags
 - Type `#tag` right in any note (e.g. `#networking #junsgarden`).

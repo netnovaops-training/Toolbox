@@ -8,6 +8,20 @@
 Scripts live in `code/local/`. Notes/docs are `.md` (renders nicely, searchable);
 runnable things are `.sh`. Run scripts from anywhere in the repo.
 
+## Logbook tickets
+```
+bash code/local/newentry.sh <type> <short-title> [tech ...]   # open: branch + entry + push
+bash code/local/worklog.sh "what I did"                       # save progress (in-progress)
+bash code/local/worklog.sh --blocked "waiting on X"           # parked
+bash code/local/resolve.sh                                    # close it, then merge the PR
+git switch <type>/<short-title> && git pull                   # come back to a ticket
+```
+Everything open, clickable: `OPEN.md` at the repo root.
+Types: troubleshooting, quick, install, project, learning. Example:
+```
+bash code/local/newentry.sh project add-branches-to-flow git github
+```
+
 ## Quick note (one line, tagged)
 Easiest (runs the script — pulls, appends, commits, pushes):
 ```

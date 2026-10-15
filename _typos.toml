@@ -15,4 +15,7 @@ extend-exclude = [
   "*.min.js",
   "*.lock",
   "LICENSE",
+  "LOGBOOK.md",   # generated
+  "JACKET.md",    # generated
+  "OPEN.md",      # generated
 ]

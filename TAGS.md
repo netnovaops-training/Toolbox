@@ -21,6 +21,10 @@ search box works the same way: just type the `#tag`.)
 - [#career](https://github.com/search?q=repo%3Anetnovaops-training%2FToolbox+%23career&type=code)
 - [#certs](https://github.com/search?q=repo%3Anetnovaops-training%2FToolbox+%23certs&type=code)
 
+## Logbook entries
+Troubleshooting, installs, projects and learning notes are sorted automatically -
+by type, by language and by branch - in [LOGBOOK.md](LOGBOOK.md).
+
 ---
 Add a new tag any time — just type `#newtag` in a note, then copy a line above and
 swap the tag name in both the text and the URL. New tags also just work in the
