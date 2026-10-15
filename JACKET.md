@@ -5,7 +5,7 @@
 Lessons from real work, rolled up automatically from the [logbook](LOGBOOK.md).
 Each one links to the full write-up and to the branch where the work happened.
 
-**3 lessons** across **5 technologies**.
+**4 lessons** across **6 technologies**.
 
 ## docker
 
@@ -16,6 +16,8 @@ Each one links to the full write-up and to the branch where the work happened.
 
 - **add branches to flow** (2026-10-15) _(in-progress)_ - Work goes on a branch and reaches main only through a reviewed pull request, so mistakes get caught before they land.  
   [Write-up](knowledge/projects/2026-10-15-add-branches-to-flow.md) · [Branch `project/add-branches-to-flow`](https://github.com/netnovaops-training/Toolbox/tree/project/add-branches-to-flow)
+- **logbook push race** (2026-10-15) - When two automated jobs can push to the same branch, each must pull the latest and retry, or the slower one gets rejected.  
+  [Write-up](knowledge/troubleshooting/2026-10-15-logbook-push-race.md) · [Branch `troubleshooting/logbook-push-race`](https://github.com/netnovaops-training/Toolbox/tree/troubleshooting/logbook-push-race)
 
 ## github
 
@@ -23,6 +25,11 @@ Each one links to the full write-up and to the branch where the work happened.
   [Write-up](knowledge/projects/2026-10-15-add-branches-to-flow.md) · [Branch `project/add-branches-to-flow`](https://github.com/netnovaops-training/Toolbox/tree/project/add-branches-to-flow)
 - **portfolio redesign** (2026-10-15) _(in-progress)_ - A portfolio should show what I built and what it did in a few lines, and link to the detail instead of repeating it.  
   [Write-up](knowledge/projects/2026-10-15-portfolio-redesign.md) · [Branch `project/portfolio-redesign`](https://github.com/netnovaops-training/Toolbox/tree/project/portfolio-redesign)
+
+## github-actions
+
+- **logbook push race** (2026-10-15) - When two automated jobs can push to the same branch, each must pull the latest and retry, or the slower one gets rejected.  
+  [Write-up](knowledge/troubleshooting/2026-10-15-logbook-push-race.md) · [Branch `troubleshooting/logbook-push-race`](https://github.com/netnovaops-training/Toolbox/tree/troubleshooting/logbook-push-race)
 
 ## linux
 

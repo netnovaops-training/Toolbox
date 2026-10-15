@@ -5,8 +5,8 @@
 Every troubleshooting fix, install, project and learning note I've written up,
 sorted automatically. Each title opens the full write-up.
 
-**3 entries** - 2 projects · 0 installs · 1 troubleshooting · 0 learning notes  
-**2 open** · **1 resolved**
+**4 entries** - 2 projects · 0 installs · 2 troubleshooting · 0 learning notes  
+**2 open** · **2 resolved**
 
 Tickets still being worked on (on their own branches) are listed in [OPEN.md](OPEN.md).
 
@@ -20,6 +20,7 @@ Newest first.
 |---|---|---|---|---|
 | 2026-10-15 | Project | [add branches to flow](knowledge/projects/2026-10-15-add-branches-to-flow.md) | git, github | in-progress |
 | 2026-10-15 | Troubleshooting | [Container volume permission denied](knowledge/troubleshooting/2026-10-15-container-volume-permission-denied.md) | docker, linux | resolved |
+| 2026-10-15 | Troubleshooting | [logbook push race](knowledge/troubleshooting/2026-10-15-logbook-push-race.md) | github-actions, git | resolved |
 | 2026-10-15 | Project | [portfolio redesign](knowledge/projects/2026-10-15-portfolio-redesign.md) | markdown, github | in-progress |
 
 ## Open / ongoing
@@ -34,6 +35,7 @@ Newest first.
 | Closed | Type | Title | Summary |
 |---|---|---|---|
 | 2026-10-15 | Troubleshooting | [Container volume permission denied](knowledge/troubleshooting/2026-10-15-container-volume-permission-denied.md) | A container couldn't write to its bind-mounted volume; fixed a UID mismatch. |
+| 2026-10-15 | Troubleshooting | [logbook push race](knowledge/troubleshooting/2026-10-15-logbook-push-race.md) | After merging PR #3 the logbook rebuild failed to push because another job had updated main a moment earlier. |
 
 ## By type
 
@@ -48,11 +50,12 @@ Newest first.
 
 _None yet._
 
-### Troubleshooting (1)
+### Troubleshooting (2)
 
 | Date | Title | Tech | Status |
 |---|---|---|---|
 | 2026-10-15 | [Container volume permission denied](knowledge/troubleshooting/2026-10-15-container-volume-permission-denied.md) | docker, linux | resolved |
+| 2026-10-15 | [logbook push race](knowledge/troubleshooting/2026-10-15-logbook-push-race.md) | github-actions, git | resolved |
 
 ### Learning (0)
 
@@ -72,11 +75,12 @@ Every tag - tools, tech and subjects. Click one to see only its entries.
 </details>
 
 <details>
-<summary><b>git</b> (1)</summary>
+<summary><b>git</b> (2)</summary>
 
 | Date | Type | Title | Status |
 |---|---|---|---|
 | 2026-10-15 | Project | [add branches to flow](knowledge/projects/2026-10-15-add-branches-to-flow.md) | in-progress |
+| 2026-10-15 | Troubleshooting | [logbook push race](knowledge/troubleshooting/2026-10-15-logbook-push-race.md) | resolved |
 
 </details>
 
@@ -87,6 +91,15 @@ Every tag - tools, tech and subjects. Click one to see only its entries.
 |---|---|---|---|
 | 2026-10-15 | Project | [add branches to flow](knowledge/projects/2026-10-15-add-branches-to-flow.md) | in-progress |
 | 2026-10-15 | Project | [portfolio redesign](knowledge/projects/2026-10-15-portfolio-redesign.md) | in-progress |
+
+</details>
+
+<details>
+<summary><b>github-actions</b> (1)</summary>
+
+| Date | Type | Title | Status |
+|---|---|---|---|
+| 2026-10-15 | Troubleshooting | [logbook push race](knowledge/troubleshooting/2026-10-15-logbook-push-race.md) | resolved |
 
 </details>
 
@@ -148,5 +161,16 @@ The git branch each piece of work was done on.
 | Date | Type | Title | Status |
 |---|---|---|---|
 | 2026-10-15 | Project | [portfolio redesign](knowledge/projects/2026-10-15-portfolio-redesign.md) | in-progress |
+
+</details>
+
+<details>
+<summary><code>troubleshooting/logbook-push-race</code> (1)</summary>
+
+[Open this branch on GitHub](https://github.com/netnovaops-training/Toolbox/tree/troubleshooting/logbook-push-race)
+
+| Date | Type | Title | Status |
+|---|---|---|---|
+| 2026-10-15 | Troubleshooting | [logbook push race](knowledge/troubleshooting/2026-10-15-logbook-push-race.md) | resolved |
 
 </details>
