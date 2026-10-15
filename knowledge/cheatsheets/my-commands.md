@@ -5,13 +5,13 @@
 > **tags:** commands, automation, git, cheatsheet
 > **last-used:** 2026-10-15
 
-Scripts live in `code/scripts/`. Notes/docs are `.md` (renders nicely, searchable);
+Scripts live in `code/local/`. Notes/docs are `.md` (renders nicely, searchable);
 runnable things are `.sh`. Run scripts from anywhere in the repo.
 
 ## Quick note (one line, tagged)
 Easiest (runs the script — pulls, appends, commits, pushes):
 ```
-bash code/scripts/note.sh "fixed the Caddy proxy #caddy #networking"
+bash code/local/note.sh "fixed the Caddy proxy #caddy #networking"
 ```
 By hand:
 ```
@@ -21,7 +21,7 @@ git pull && echo "$(date +%F) - did a thing #tag" >> knowledge/daily-log/quick-n
 ## New troubleshooting write-up
 Start one (makes a dated file from the template):
 ```
-bash code/scripts/newfix.sh container-permission-denied
+bash code/local/newfix.sh container-permission-denied
 ```
 Then open the file, fill the XXX, and save it:
 ```
@@ -31,8 +31,8 @@ git add knowledge/troubleshooting/ && git commit -m "Troubleshooting: <title>" &
 ## New folders (bulk)
 Edit the list inside, then run:
 ```
-bash code/scripts/new-folders.sh            # Linux / Termux
-powershell -ExecutionPolicy Bypass -File code/scripts/new-folders.ps1   # Windows
+bash code/local/new-folders.sh            # Linux / Termux
+powershell -ExecutionPolicy Bypass -File code/local/new-folders.ps1   # Windows
 ```
 
 ## The everyday git loop

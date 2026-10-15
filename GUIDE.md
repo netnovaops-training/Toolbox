@@ -13,7 +13,7 @@ Everything in this repo and how to use it. Written 2026-10-15.
 | Folder / file | What it's for |
 |---|---|
 | `learn/` | The lessons, in order (start at `learn/START-HERE.md`). |
-| `code/` | `mine/` = code I wrote · `useful/` = snippets I reuse · `scripts/` = automation tools. |
+| `code/` | `mine/` = code I wrote · `useful/` = snippets I reuse · `local/` = automation tools. |
 | `knowledge/` | `cheatsheets/`, `notes/`, `troubleshooting/`, `daily-log/`, `documents/`, `cert-prep/`. |
 | `infra/` | Notes by ops topic (networking, etc.). |
 | `PORTFOLIO.md` | My professional page, browsable by skill. |
@@ -55,7 +55,7 @@ Pick the size that fits:
 - **`knowledge/notes/using-md-files-in-git.md`** — how markdown-in-git works.
 
 ## 7. Make folders fast
-- **`code/scripts/new-folders.sh`** / **`new-folders.ps1`** — edit the list, run it, it makes folders and keeps them in git.
+- **`code/local/new-folders.sh`** / **`new-folders.ps1`** — edit the list, run it, it makes folders and keeps them in git.
 
 ## 8. The git flow (every time)
 ```
