@@ -5,8 +5,8 @@
 Every troubleshooting fix, install, project and learning note I've written up,
 sorted automatically. Each title opens the full write-up.
 
-**1 entry** - 0 projects · 0 installs · 1 troubleshooting · 0 learning notes  
-**0 open** · **1 resolved**
+**2 entries** - 1 project · 0 installs · 1 troubleshooting · 0 learning notes  
+**1 open** · **1 resolved**
 
 Tickets still being worked on (on their own branches) are listed in [OPEN.md](OPEN.md).
 
@@ -18,11 +18,14 @@ Newest first.
 
 | Date | Type | Title | Tech | Status |
 |---|---|---|---|---|
+| 2026-10-15 | Project | [add branches to flow](knowledge/projects/2026-10-15-add-branches-to-flow.md) | git, github | in-progress |
 | 2026-10-15 | Troubleshooting | [Container volume permission denied](knowledge/troubleshooting/2026-10-15-container-volume-permission-denied.md) | docker, linux | resolved |
 
 ## Open / ongoing
 
-_None yet._
+| Date | Type | Title | Status | Branch |
+|---|---|---|---|---|
+| 2026-10-15 | Project | [add branches to flow](knowledge/projects/2026-10-15-add-branches-to-flow.md) | in-progress | [`project/add-branches-to-flow`](https://github.com/netnovaops-training/Toolbox/tree/project/add-branches-to-flow) |
 
 ## Resolved / completed
 
@@ -32,9 +35,11 @@ _None yet._
 
 ## By type
 
-### Projects (0)
+### Projects (1)
 
-_None yet._
+| Date | Title | Tech | Status |
+|---|---|---|---|
+| 2026-10-15 | [add branches to flow](knowledge/projects/2026-10-15-add-branches-to-flow.md) | git, github | in-progress |
 
 ### Installs (0)
 
@@ -60,6 +65,24 @@ Every tag - tools, tech and subjects. Click one to see only its entries.
 | Date | Type | Title | Status |
 |---|---|---|---|
 | 2026-10-15 | Troubleshooting | [Container volume permission denied](knowledge/troubleshooting/2026-10-15-container-volume-permission-denied.md) | resolved |
+
+</details>
+
+<details>
+<summary><b>git</b> (1)</summary>
+
+| Date | Type | Title | Status |
+|---|---|---|---|
+| 2026-10-15 | Project | [add branches to flow](knowledge/projects/2026-10-15-add-branches-to-flow.md) | in-progress |
+
+</details>
+
+<details>
+<summary><b>github</b> (1)</summary>
+
+| Date | Type | Title | Status |
+|---|---|---|---|
+| 2026-10-15 | Project | [add branches to flow](knowledge/projects/2026-10-15-add-branches-to-flow.md) | in-progress |
 
 </details>
 
@@ -90,5 +113,16 @@ The git branch each piece of work was done on.
 | Date | Type | Title | Status |
 |---|---|---|---|
 | 2026-10-15 | Troubleshooting | [Container volume permission denied](knowledge/troubleshooting/2026-10-15-container-volume-permission-denied.md) | resolved |
+
+</details>
+
+<details>
+<summary><code>project/add-branches-to-flow</code> (1)</summary>
+
+[Open this branch on GitHub](https://github.com/netnovaops-training/Toolbox/tree/project/add-branches-to-flow)
+
+| Date | Type | Title | Status |
+|---|---|---|---|
+| 2026-10-15 | Project | [add branches to flow](knowledge/projects/2026-10-15-add-branches-to-flow.md) | in-progress |
 
 </details>
