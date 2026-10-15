@@ -5,6 +5,8 @@ engineering** job. I learn by doing: I read something, run it in a lab, break it
 fix it, and write down what stuck. This repo is that process in the open — and my
 portfolio while I build the skills.
 
+**👉 [PORTFOLIO.md](PORTFOLIO.md)** — my progress, browsable by skill (networking, Linux, containers, security…).
+
 ## How I use it
 
 - **Learn in order** → open [`learn/START-HERE.md`](learn/START-HERE.md). It's a

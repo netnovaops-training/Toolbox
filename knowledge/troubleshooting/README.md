@@ -23,6 +23,13 @@ When they ask "tell me about a problem you solved," you open this folder and hav
 ten real ones ready — each framed as **problem → what I did → result → lesson**.
 That's a candidate who learns, not just one who memorises.
 
-## Entries
-- `2026-10-15-container-volume-permission-denied.md` — a sample to show the format.
-- (add your own as you go)
+## Issues → resolutions (the short collection)
+One line each — scan it fast; click "full" for the write-up. Add a row when you add an entry.
+
+| Date | Issue | Resolution | Tags | |
+|------|-------|-----------|------|---|
+| 2026-10-15 | Container couldn't write its mounted volume | Matched the container's UID to the host folder's owner | docker, permissions | [full](2026-10-15-container-volume-permission-denied.md) |
+| | | | | |
+
+_Keeping this table short and honest is the point — it's the quick view; the dated
+files hold the detail; and the highlights roll up into [../../PORTFOLIO.md](../../PORTFOLIO.md)._
