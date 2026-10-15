@@ -1,34 +1,12 @@
 # Toolbox — Jason A. Gibson
 
-My working collection on the way to infrastructure engineer. Scripts, notes,
-cheatsheets and anything useful, organised broad to specific.
+My working collection toward infrastructure engineer. Four areas; add more later.
 
-This file is the map. Most folders don't need their own README — open them and
-read the files. Put a short header on each *item* (see CONVENTIONS.md), not on
-folders.
-
-## The map
-- **os/** — operating systems
-  - `linux/` · `windows/` (`powershell/`, `cmd/`)
-- **networking/** — SSH, DNS, Tailscale, curl, ports, firewall
-- **containers/** — `docker/` (compose, commands), Kubernetes later
-- **cloud/** — AWS / Azure / GCP notes, when I get there
-- **ci-cd/** — GitHub Actions, pipelines
-- **programming/** — by language: `bash/`, `powershell/`, `python/`, `rust/`,
-  `web/` (front end), `mobile/` (Android)
-- **databases/** — SQL, MariaDB, Postgres
-- **monitoring/** — logs, metrics, uptime
-- **security/** — hardening, scanning, how-tos
-- **troubleshooting/** — runbooks, "it's slow / it's down" playbooks
+- **infra/** — os, networking, containers, cloud, databases, monitoring, security, ci-cd
+- **dev/** — scripts by language: bash, powershell, python, rust, web, mobile
 - **ai/** — prompts, local AI, tools
-- **cheatsheets/** — quick, ADHD-style references (git is here)
-- **learning/** — cert prep and things I'm working toward
-- **notes/** — anything else
+- **knowledge/** — cheatsheets, troubleshooting, cert-prep, notes
 
-## How I work it
-1. Drop a file in the closest folder.
-2. Put a short header on top (what / status / tags / last-used — see CONVENTIONS.md).
-3. `git add` · `git commit -m "..."` · `git push`. Or add it in the GitHub app.
-
-Licence: MIT (see LICENSE) for what I write. Copied things keep their own
-notice — see SOURCES.md. Reusable header: HEADER-TEMPLATE.txt.
+Each item gets a short header (what / status / tags) — see CONVENTIONS.md.
+Licence: MIT (LICENSE) for my work; copied things keep their notice (SOURCES.md).
+Keep it generic here (public repo); real homelab configs/secrets stay private.
