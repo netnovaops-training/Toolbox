@@ -2,8 +2,11 @@
 # Add words here when it flags something that is correct (a command, a name).
 
 [default.extend-words]
-# e.g. a command or abbreviation the checker doesn't know:
-# "ba" = "ba"
+# correct words/command fragments the checker misreads (map word -> itself):
+ba = "ba"      # sed loop label idiom:  $!ba
+hax = "hax"    # ps BSD flags:  ps hax
+ome = "ome"    # grep self-match trick:  grep '[s]ome-service'
+ded = "ded"    # "ANDed" (AND-ed)
 
 [files]
 # don't spell-check these:
