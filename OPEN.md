@@ -5,8 +5,10 @@
 Everything I've started and haven't resolved yet. Rebuilt automatically whenever I
 push to a ticket branch or open, close or merge a pull request.
 
-**0 open tickets** · 0 blocked · resolved work is in the [logbook](LOGBOOK.md)
+**1 open ticket** · 0 blocked · resolved work is in the [logbook](LOGBOOK.md)
 
 Pick one up: `git switch <branch> && git pull`, then `bash code/local/worklog.sh "what I did"`.
 
-_Nothing open - nice._
+| Status | Ticket | Type | Tech | Opened | Last update | Branch | Pull request |
+|---|---|---|---|---|---|---|---|
+| **open** | [add branches to flow](https://github.com/netnovaops-training/Toolbox/blob/project/add-branches-to-flow/knowledge/projects/2026-10-15-add-branches-to-flow.md) | Project | git, github | 2026-10-15 | 2026-10-15 | [`project/add-branches-to-flow`](https://github.com/netnovaops-training/Toolbox/tree/project/add-branches-to-flow) | no PR yet - [open one](https://github.com/netnovaops-training/Toolbox/compare/main...project/add-branches-to-flow?expand=1) |
