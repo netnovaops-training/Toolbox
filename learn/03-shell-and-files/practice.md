@@ -74,7 +74,7 @@ subfolder when you get stuck.
     files, one with a space in its name. Write a single pipeline that prints a
     line for *each* file without the space breaking the arguments.
     - Hint: `-print0` on one end, `xargs -0` on the other. Try it first *without*
-      the null trick and watch it mis-split.
+      the null trick and watch it split wrong.
 
 13. **What changed since the marker.** Touch a reference file, wait a second,
     edit one existing file, then list everything newer than the marker — minus
