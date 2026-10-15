@@ -1,27 +1,46 @@
-> **what:** <one line: the problem in a few words>
+> **what:** [problem in a few words]
 > **status:** solved | ongoing
-> **tags:** <topic, tool, area>
+> **tags:** [tool, area]
 > **last-used:** YYYY-MM-DD
 
-# <Short title of the problem>
+# [Short title of the problem]
+
+> **Say it in one line (for interviews/resume):**
+> "[What broke] — I [what I did] and [the result]."
+> _e.g. "A container couldn't write its volume — I matched the container's UID to the
+> host folder's owner and the app came back up."_
+
+**Fill the blanks. Keep it generic (no secrets, no real IPs). Delete the hints when done.**
 
 ## The problem
-What broke, and when I noticed it. One or two sentences.
+[What broke, and when I noticed it. 1-2 sentences.]
 
 ## Symptoms
-What I actually saw — error messages, behaviour. (Paste the exact error if it's
-short and has no secrets.)
+```
+[paste the exact error line if it's short and has no secrets]
+```
+[What I actually saw / what it did wrong.]
 
 ## What I tried
-The steps I took to narrow it down, in order — including the ones that *didn't*
-work. (This shows how I reason, which matters as much as the fix.)
+- [thing I tried] → [what happened]
+- [thing I tried] → [what happened]   ← include the ones that DIDN'T work; it shows how I think
 
 ## The cause
-What was actually wrong, once I found it.
+[What was actually wrong, once I found it.]
 
 ## The fix
-The exact steps/commands that solved it. Keep it generic (no secrets/real IPs).
+```
+[the exact commands/steps that solved it — generic, no secrets]
+```
 
 ## What I learned / how I'm more prepared
-The takeaway, and what I'll check first next time so this is faster (or doesn't
-happen again). This is the part employers care about most.
+- [the takeaway in one line]
+- Next time I'll check [X] first, so this is faster / doesn't happen again.
+
+---
+<!-- Quick checklist before committing:
+  [ ] one-line interview version filled in at the top
+  [ ] no secrets, keys, real IPs, or homelab details
+  [ ] "what I learned" is filled in (the part employers care about)
+  then:  git add this file  ->  git commit -m "Troubleshooting: <title>"  ->  git push
+-->
