@@ -1,14 +1,15 @@
 ## What this branch does
 
-<!-- One or two sentences: what this ticket covers and why. -->
+REPLACE: one or two sentences - what this ticket covers and why.
 
-- **Branch:** <!-- e.g. project/add-branches-to-flow -->
-- **Entry type:** <!-- troubleshooting | install | project | learning -->
-- **Status when merged:** <!-- resolved, or in-progress / blocked if parking it -->
+- **Branch:** REPLACE (e.g. project/add-branches-to-flow)
+- **Entry type:** REPLACE (troubleshooting, install, project or learning)
+- **Status when merged:** REPLACE (resolved, or in-progress / blocked if parking it)
 
 ## What I did and what came up
 
-<!-- The main steps, and any problems hit along the way (link troubleshooting entries). -->
+- REPLACE: the main steps
+- REPLACE: any problems hit along the way (link troubleshooting entries)
 
 ## Checklist
 
@@ -17,4 +18,5 @@
 - [ ] The lesson is a genuine takeaway I could explain in an interview
 - [ ] I verified it works (and wrote down how)
 - [ ] No secrets, keys, passwords, real IPs, or homelab details
+- [ ] No REPLACE left in this description
 - [ ] Spell-check (typos) and logbook checks are green
