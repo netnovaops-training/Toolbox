@@ -34,10 +34,40 @@ lesson: Work goes on a branch and reaches main only through a reviewed pull requ
 5. Wrote the PR description, found it rendered wrong, and fixed it.
 6. Fixed the pull request template and the entry templates on this branch.
 
+## Setup and where to find things
+**Where my copies live**
+- Phone (Termux): `~/learning-lab/Toolbox` - get there with `cd ~/learning-lab/Toolbox`
+- PC: `D:\Toolbox` (also reachable from the phone over SSH in Termius)
+- GitHub: https://github.com/netnovaops-training/Toolbox
+- Always start with `git switch main && git pull` (or switch to the ticket branch and pull).
+
+**Where to look on GitHub**
+- `OPEN.md` - every ticket I've started and not finished, with links to the entry, branch and PR.
+- `LOGBOOK.md` - every entry, sorted by date, status, type, topic, language and branch.
+- `JACKET.md` - the lessons, grouped by technology.
+- `GUIDE.md` (section 3) - the whole ticket flow; `knowledge/cheatsheets/my-commands.md` - the commands.
+- Pull request tabs: **Conversation** = description and comments; **Files changed** = review only
+  (tapping a line adds a review comment, it does not edit); **Checks** = the green ticks.
+
+**How to do the common things**
+- Edit a file on GitHub: open the file, then the pencil (or the file's menu in Files changed -> Edit file).
+  Commit to the ticket branch, never to main.
+- Edit in Termux: `nano <file>`, save with Ctrl+O then Enter, exit with Ctrl+X.
+- Mark a PR as a draft: on the PR, under Reviewers, "Convert to draft".
+- Delete a finished branch: Code -> Branches -> trash icon (or "Delete branch" after merging).
+- Show code-like text without GitHub acting on it: wrap it in backticks, like `<!-- -->`.
+
+**The ticket commands**
+```
+bash code/local/newentry.sh <type> <short-title> [tags ...]   # open
+bash code/local/worklog.sh "what I did"                       # save progress
+bash code/local/resolve.sh                                    # close, then merge the PR
+```
+
 ## Issues hit
 - **PR description text went missing** -> I typed my notes inside the hidden `<!-- -->` comments, and one comment wasn't closed, so GitHub hid most of the description. Fixed by pasting a clean description, and changed the PR template to visible `REPLACE` hints so it can't happen again.
 - **Tried to fill the entry from the "Files changed" screen** -> tapping a line there opens a review comment, not an editor. To change a file, use the file's menu and choose "Edit file", or edit in Termux with `nano`.
-- **`resolve.sh` would never have closed a ticket** -> the instruction comment in every template said "Fill every XXX", and the script counted that as an unfilled blank. Reworded the comment and made the script ignore text inside comments.
+- **`resolve.sh` would never have closed a ticket** -> the instruction comment in every template told me to fill every blank by naming the placeholder word itself, and the script counted that mention as an unfilled blank. Reworded the comment and made the script ignore text inside comments.
 
 ## Result (verified)
 - **What works now:** the ticket flow runs from opening a ticket to an open pull request: branch made, entry pushed, listed in `OPEN.md`, linked to PR #3.
@@ -53,3 +83,4 @@ lesson: Work goes on a branch and reaches main only through a reviewed pull requ
 - 2026-10-15 - opened
 - 2026-10-15 - opened PR #3; fixed the PR description and the PR template
 - 2026-10-15 - filled in the write-up; fixed the resolve.sh placeholder bug
+- 2026-10-15 - added setup notes and where to find things
