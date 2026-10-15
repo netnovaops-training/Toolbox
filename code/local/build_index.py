@@ -280,6 +280,43 @@ def build_jacket(entries):
     return "\n".join(out).rstrip() + "\n"
 
 
+SHOWCASE_LIMIT = 5
+BEGIN, END = "<!-- BEGIN LATEST WORK -->", "<!-- END LATEST WORK -->"
+
+
+def showcased(e):
+    """Resolved projects show automatically; anything else opts in with showcase: true."""
+    flagged = str(e.get("showcase", "")).lower() in ("true", "yes")
+    finished = e["status"] == "resolved" and not is_placeholder(e.get("summary", ""))
+    return finished and (e["type"] == "project" or flagged)
+
+
+def build_latest(entries):
+    rows = [e for e in entries if showcased(e)][:SHOWCASE_LIMIT]
+    if not rows:
+        return "_Finished projects appear here automatically._\n"
+    out = []
+    for e in rows:
+        tech = " ".join(f"`{t}`" for t in e["tech"])
+        line = (f"- **[{cell(e['title']).capitalize()}]({e['path']})** "
+                f"({e.get('closed') or e['date']}) - {cell(e['summary'])}")
+        out.append(f"{line}  \n  {tech}" if tech else line)
+    out.append("\n[Everything in the logbook](LOGBOOK.md)")
+    return "\n".join(out) + "\n"
+
+
+def write_section(path, body):
+    """Replace only the text between the LATEST WORK markers in a hand-written page."""
+    if not path.exists():
+        return
+    old = path.read_text(encoding="utf-8")
+    if BEGIN not in old or END not in old:
+        return
+    head, rest = old.split(BEGIN, 1)
+    _, tail = rest.split(END, 1)
+    write(path, f"{head}{BEGIN}\n{body}{END}{tail}")
+
+
 def write(path, content):
     old = path.read_text(encoding="utf-8") if path.exists() else None
     if old == content:
@@ -304,6 +341,7 @@ def main():
         return 0
     write(ROOT / "LOGBOOK.md", build_logbook(entries))
     write(ROOT / "JACKET.md", build_jacket(entries))
+    write_section(ROOT / "PORTFOLIO.md", build_latest(entries))
     return 0
 
 
