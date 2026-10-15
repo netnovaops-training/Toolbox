@@ -14,7 +14,7 @@ lesson: XXX
 
 # __TITLE__
 
-<!-- Quick entry: fill the XXX. Save: bash code/local/worklog.sh "note"  Close: bash code/local/resolve.sh -->
+<!-- Quick entry: fill in the placeholders. Save: bash code/local/worklog.sh "note"  Close: bash code/local/resolve.sh -->
 
 **One line (for interviews):** XXX broke - I XXX, and XXX (the result).
 

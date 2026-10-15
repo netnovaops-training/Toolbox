@@ -14,7 +14,7 @@ lesson: XXX
 
 # __TITLE__
 
-<!-- Learning note. Fill every XXX.
+<!-- Learning note. Fill in every placeholder.
      Save progress:  bash code/local/worklog.sh "what I studied"
      Close it:       bash code/local/resolve.sh -->
 
