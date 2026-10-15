@@ -8,9 +8,9 @@ sorted automatically. Each title opens the full write-up.
 **1 entry** - 0 projects · 0 installs · 1 troubleshooting · 0 learning notes  
 **0 open** · **1 resolved**
 
-Work still in progress lives on branches as [open pull requests](https://github.com/netnovaops-training/Toolbox/pulls) until it's merged.
+Tickets still being worked on (on their own branches) are listed in [OPEN.md](OPEN.md).
 
-Jump to: [Timeline](#timeline) · [Open](#open--ongoing) · [Resolved](#resolved--completed) · [By type](#by-type) · [By language](#by-language) · [By branch](#by-branch) · [Career jacket](JACKET.md)
+Jump to: [Timeline](#timeline) · [Open](#open--ongoing) · [Resolved](#resolved--completed) · [By type](#by-type) · [By language](#by-language) · [By branch](#by-branch) · [Open tickets](OPEN.md) · [Career jacket](JACKET.md)
 
 ## Timeline
 

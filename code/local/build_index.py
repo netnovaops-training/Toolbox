@@ -178,13 +178,13 @@ def build_logbook(entries):
         f"**{plural(len(entries), 'entry', 'entries')}** - {counts}  ",
         f"**{len(open_rows)} open** · **{len(done_rows)} resolved**",
         "",
-        f"Work still in progress lives on branches as "
-        f"[open pull requests](https://github.com/{REPO}/pulls) until it's merged.",
+        "Tickets still being worked on (on their own branches) are listed in "
+        "[OPEN.md](OPEN.md).",
         "",
         "Jump to: [Timeline](#timeline) · [Open](#open--ongoing) · "
         "[Resolved](#resolved--completed) · [By type](#by-type) · "
         "[By language](#by-language) · [By branch](#by-branch) · "
-        "[Career jacket](JACKET.md)",
+        "[Open tickets](OPEN.md) · [Career jacket](JACKET.md)",
         "",
         "## Timeline",
         "",

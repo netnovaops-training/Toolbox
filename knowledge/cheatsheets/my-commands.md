@@ -16,6 +16,7 @@ bash code/local/worklog.sh --blocked "waiting on X"           # parked
 bash code/local/resolve.sh                                    # close it, then merge the PR
 git switch <type>/<short-title> && git pull                   # come back to a ticket
 ```
+Everything open, clickable: `OPEN.md` at the repo root.
 Types: troubleshooting, quick, install, project, learning. Example:
 ```
 bash code/local/newentry.sh project add-branches-to-flow git github

@@ -15,6 +15,7 @@ Run these from anywhere inside the repo. Full reference:
 | `bash code/local/worklog.sh "what I did"` | Save progress on the current ticket: dated work-log line, status in-progress, push. Add `--blocked` if stuck. |
 | `bash code/local/resolve.sh` | Close the ticket: status resolved, closed date, push. Then merge the pull request. |
 | `bash code/local/newfix.sh <short-title> [tech ...]` | Shortcut for `newentry.sh quick ...`. |
+| `python -I code/local/build_open.py` | (Optional, PC, after `git fetch`) preview OPEN.md. GitHub rebuilds it on every ticket push or PR change. |
 | `python -I code/local/build_index.py` | (Optional, PC) preview LOGBOOK.md and JACKET.md. GitHub rebuilds them on every merge anyway. |
 
 ## Everyday chores

@@ -16,6 +16,7 @@ Everything in this repo and how to use it. Written 2026-10-15.
 | `code/` | `mine/` = code I wrote · `useful/` = snippets I reuse · `local/` = automation tools. |
 | `knowledge/` | Logbook entries: `troubleshooting/`, `installs/`, `projects/`, `learning/`. Plus `cheatsheets/`, `notes/`, `daily-log/`, `documents/`, `cert-prep/`. |
 | `LOGBOOK.md` | Every logbook entry, sorted by date, status, type, language and branch. Built automatically. |
+| `OPEN.md` | Live list of every open ticket (on any branch), each linked to its entry and pull request. Built automatically. |
 | `JACKET.md` | My career jacket: every lesson learned, grouped by technology, linked to the work. Built automatically. |
 | `infra/` | Notes by ops topic (networking, etc.). |
 | `PORTFOLIO.md` | My professional page, browsable by skill. |
@@ -55,6 +56,9 @@ they get there by merging. `LOGBOOK.md` and `JACKET.md` rebuild themselves after
 | Come back later | `git switch <type>/<short-title> && git pull` | Pick up where I left off. |
 | Stuck | `bash code/local/worklog.sh --blocked "waiting on X"` | Status blocked. I can still merge so it's on record (shows under Open). |
 | Resolve | `bash code/local/resolve.sh` | Checks no XXX is left, sets resolved + closed date, pushes. Then I click **Ready for review** and **Merge**. |
+
+**See everything I have open:** [OPEN.md](OPEN.md) - rebuilt whenever I push to a ticket branch
+or a pull request opens, closes or merges. Click a ticket to open it.
 
 **Hit a problem in the middle of a project?** While on the project branch, run
 `newentry.sh troubleshooting ...` - it rides on the same branch and merges with it.

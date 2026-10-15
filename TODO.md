@@ -1,6 +1,7 @@
 # TODO
 
 My learning to-dos. Tick a box when done.
+Open tickets (work I've started) list themselves in [OPEN.md](OPEN.md).
 
 - [ ] **Merge my first real pull request: the logbook system (PR #2).** #git #career
   1. Open https://github.com/netnovaops-training/Toolbox/pull/2

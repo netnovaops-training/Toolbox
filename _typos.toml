@@ -17,4 +17,5 @@ extend-exclude = [
   "LICENSE",
   "LOGBOOK.md",   # generated
   "JACKET.md",    # generated
+  "OPEN.md",      # generated
 ]

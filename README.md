@@ -26,6 +26,7 @@ portfolio while I build the skills.
 | **infra/** | Notes by ops topic: networking, containers, security, os, cloud. |
 | **knowledge/** | Logbook entries (`troubleshooting/`, `installs/`, `projects/`, `learning/`) plus `cheatsheets/`, `notes/`, `documents/`, `cert-prep/`. |
 | **LOGBOOK.md** | Every entry, sorted by date, status, type, language and branch (auto-built). |
+| **OPEN.md** | My live to-do: every ticket I've started and not resolved, with clickable links (auto-built). |
 | **JACKET.md** | Lessons learned, grouped by technology, linked to the work (auto-built). |
 | **ai/** | AI tooling notes (later). |
 | **SKILLS.md** | The bigger skills roadmap toward the job. |
