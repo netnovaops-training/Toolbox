@@ -32,7 +32,7 @@ fi
 git pull -q --no-edit origin "$branch" 2>/dev/null || true
 entry="$(find_entry "$file")"
 set_field "$entry" status "$status"
-[ "$status" = "blocked" ] && note="blocked: $note"
+if [ "$status" = "blocked" ]; then note="blocked: $note"; fi
 log_line "$entry" "$note"
 
 git add "$entry"
