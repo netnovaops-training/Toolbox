@@ -8,6 +8,7 @@ status: open
 opened: __DATE__
 closed:
 tags: []
+showcase: false
 summary: XXX
 lesson: XXX
 ---

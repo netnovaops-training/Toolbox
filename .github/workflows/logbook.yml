@@ -3,7 +3,8 @@ name: logbook
 # Keeps LOGBOOK.md and JACKET.md in sync with the logbook entries.
 # - On a pull request: checks every entry's frontmatter. A broken entry fails the PR,
 #   so nothing silently drops out of the index. Nothing is written.
-# - On a push to main (after a merge): rebuilds LOGBOOK.md and JACKET.md and commits
+# - On a push to main (after a merge): rebuilds LOGBOOK.md, JACKET.md and the "Latest work"
+#   part of PORTFOLIO.md, and commits
 #   them back if they changed. That bot commit can't re-trigger this workflow:
 #   pushes made with GITHUB_TOKEN never start new workflow runs, the generated files
 #   aren't in the trigger paths, and it only commits when something changed.
@@ -55,10 +56,10 @@ jobs:
         run: python3 -I code/local/build_index.py
       - name: Commit if changed
         run: |
-          if [ -n "$(git status --porcelain LOGBOOK.md JACKET.md)" ]; then
+          if [ -n "$(git status --porcelain LOGBOOK.md JACKET.md PORTFOLIO.md)" ]; then
             git config user.name  "logbook-bot"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add LOGBOOK.md JACKET.md
+            git add LOGBOOK.md JACKET.md PORTFOLIO.md
             git commit -m "Rebuild logbook index and jacket [skip ci]"
             git push
           else

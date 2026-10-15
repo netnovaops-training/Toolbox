@@ -57,6 +57,10 @@ they get there by merging. `LOGBOOK.md` and `JACKET.md` rebuild themselves after
 | Stuck | `bash code/local/worklog.sh --blocked "waiting on X"` | Status blocked. I can still merge so it's on record (shows under Open). |
 | Resolve | `bash code/local/resolve.sh` | Checks no XXX is left, sets resolved + closed date, pushes. Then I click **Ready for review** and **Merge**. |
 
+**Show it off:** every project I resolve appears in the "Latest work" section of
+[PORTFOLIO.md](PORTFOLIO.md) by itself (newest 5). For a fix or install worth showing,
+change `showcase: false` to `showcase: true` at the top of the entry.
+
 **See everything I have open:** [OPEN.md](OPEN.md) - rebuilt whenever I push to a ticket branch
 or a pull request opens, closes or merges. Click a ticket to open it.
 

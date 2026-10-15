@@ -4,12 +4,12 @@ title: portfolio redesign
 date: 2026-10-15
 branch: project/portfolio-redesign
 tech: [markdown, github]
-status: open
+status: in-progress
 opened: 2026-10-15
 closed:
-tags: []
-summary: XXX
-lesson: XXX
+tags: [portfolio, career]
+summary: Rewrote PORTFOLIO.md from a long list of lessons into a short page that leads with projects across all my repos.
+lesson: A portfolio should show what I built and what it did in a few lines, and link to the detail instead of repeating it.
 ---
 
 # portfolio redesign
@@ -19,25 +19,30 @@ lesson: XXX
      Close it:       bash code/local/resolve.sh -->
 
 ## Goal
-- **What I'm building and why:** XXX
-- **Done looks like:** XXX
+- **What I'm building and why:** the old portfolio was 68 lines, listed lessons instead of results, and only covered this repo. It was too much to show someone.
+- **Done looks like:** one short page someone can read in a minute: who I am, my projects across repos, and where to find proof.
 
 ## Environment
-- XXX (OS, tools, versions - generic)
+- Markdown on GitHub; read on phone and desktop
 
 ## Steps
-1. XXX
-2. XXX
+1. Read the old page and listed what a reader actually needs: role goal, projects, proof.
+2. Led with projects across repos: Jun's Garden, Toolbox, learning-lab.
+3. Wrote each project as a one-line description plus a few results, with the tools as tags.
+4. Moved the detail out: lessons go to JACKET.md, write-ups to LOGBOOK.md; the skills table keeps one or two proof links each.
+5. Dropped the hand-kept "recent progress" list - the logbook timeline does that automatically now.
 
 ## Issues hit
-- XXX -> how I handled it. Full write-up: `../troubleshooting/YYYY-MM-DD-title.md`
+- Jun's Garden, my biggest project, wasn't on the page at all -> added it first, described from its README so the facts are accurate.
 
 ## Result (verified)
-- **What works now:** XXX
-- **How I confirmed it:** XXX
+- **What works now:** the page is about half the length, starts with projects, and every link goes to real work.
+- **How I confirmed it:** previewed it on the pull request on my phone and checked each link opens.
 
 ## What I learned
-- XXX
+- Lead with results, not a list of everything I touched.
+- Link to detail instead of copying it, so the page stays short and doesn't go stale.
 
 ## Work log
 - 2026-10-15 - opened
+- 2026-10-15 - rewrote PORTFOLIO.md around projects across repos
