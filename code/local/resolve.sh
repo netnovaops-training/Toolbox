@@ -22,7 +22,8 @@ fi
 
 git pull -q --no-edit origin "$branch" 2>/dev/null || true
 entry="$(find_entry "$file")"
-left="$(grep -c 'XXX' "$entry" || true)"
+# count XXX placeholders, ignoring anything inside <!-- --> instruction comments
+left="$(awk '/<!--/{c=1} !c && /XXX/{n++} /-->/{c=0} END{print n+0}' "$entry")"
 if [ "$left" != "0" ]; then
   echo "Not yet: $entry still has $left line(s) with XXX to fill in (summary, lesson, fix...)."
   echo "Fill them in, then run this again."

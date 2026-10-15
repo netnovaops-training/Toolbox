@@ -14,7 +14,7 @@ lesson: XXX
 
 # __TITLE__
 
-<!-- Install / setup record. Fill every XXX. No secrets, keys, real IPs, or homelab details.
+<!-- Install / setup record. Fill in every placeholder. No secrets, keys, real IPs, or homelab details.
      Save progress:  bash code/local/worklog.sh "what I did"
      Close it:       bash code/local/resolve.sh -->
 

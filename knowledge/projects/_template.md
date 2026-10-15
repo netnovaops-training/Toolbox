@@ -14,7 +14,7 @@ lesson: XXX
 
 # __TITLE__
 
-<!-- Project report. Fill every XXX. No secrets, keys, real IPs, or homelab details.
+<!-- Project report. Fill in every placeholder. No secrets, keys, real IPs, or homelab details.
      Save progress:  bash code/local/worklog.sh "what I did"
      Close it:       bash code/local/resolve.sh -->
 

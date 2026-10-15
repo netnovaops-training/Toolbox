@@ -14,7 +14,7 @@ lesson: XXX
 
 # __TITLE__
 
-<!-- Fill every XXX. Keep it generic: no secrets, keys, real IPs, or homelab details.
+<!-- Fill in every placeholder. Keep it generic: no secrets, keys, real IPs, or homelab details.
      Quality bar: knowledge/troubleshooting/GUIDELINE.md
      Save progress:  bash code/local/worklog.sh "what I did"
      Close it:       bash code/local/resolve.sh
