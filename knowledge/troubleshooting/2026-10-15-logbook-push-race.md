@@ -4,9 +4,9 @@ title: logbook push race
 date: 2026-10-15
 branch: troubleshooting/logbook-push-race
 tech: [github-actions, git]
-status: in-progress
+status: resolved
 opened: 2026-10-15
-closed:
+closed: 2026-10-15
 tags: [ci, race-condition, workflow]
 summary: After merging PR #3 the logbook rebuild failed to push because another job had updated main a moment earlier.
 lesson: When two automated jobs can push to the same branch, each must pull the latest and retry, or the slower one gets rejected.
@@ -25,3 +25,4 @@ lesson: When two automated jobs can push to the same branch, each must pull the 
 ## Work log
 - 2026-10-15 - opened
 - 2026-10-15 - found the cause in the run log, re-ran the job, added pull-and-retry to the workflow
+- 2026-10-15 - fix merged
