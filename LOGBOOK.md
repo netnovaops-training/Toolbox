@@ -5,7 +5,7 @@
 Every troubleshooting fix, install, project and learning note I've written up,
 sorted automatically. Each title opens the full write-up.
 
-**1 entry** - 0 projects · 0 installs · 1 troubleshooting · 0 learning  
+**1 entry** - 0 projects · 0 installs · 1 troubleshooting · 0 learning notes  
 **0 open** · **1 resolved**
 
 Work still in progress lives on branches as [open pull requests](https://github.com/netnovaops-training/Toolbox/pulls) until it's merged.

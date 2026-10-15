@@ -26,6 +26,9 @@ FOLDERS = {  # folder -> type it must contain
 TYPE_ORDER = ["project", "install", "troubleshooting", "learning"]
 TYPE_LABEL = {"project": "Projects", "install": "Installs",
               "troubleshooting": "Troubleshooting", "learning": "Learning"}
+TYPE_COUNT = {"project": ("project", "projects"), "install": ("install", "installs"),
+              "troubleshooting": ("troubleshooting", "troubleshooting"),
+              "learning": ("learning note", "learning notes")}
 STATUSES = ["open", "in-progress", "blocked", "resolved"]
 OPEN = {"open", "in-progress", "blocked"}
 REQUIRED = ["type", "title", "date", "branch", "tech", "status"]
@@ -163,7 +166,7 @@ def build_logbook(entries):
         ["untagged"] if any(not e["tech"] for e in entries) else [])
     branches = sorted({e["branch"] for e in entries})
 
-    counts = " · ".join(f"{len(by_type[t])} {TYPE_LABEL[t].lower()}" for t in TYPE_ORDER)
+    counts = " · ".join(plural(len(by_type[t]), *TYPE_COUNT[t]) for t in TYPE_ORDER)
     out = [
         "# Logbook",
         "",
