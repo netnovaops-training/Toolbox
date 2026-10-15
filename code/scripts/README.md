@@ -13,4 +13,5 @@ Run these from anywhere inside the repo. Full reference:
 | `note.sh "text #tag"` | Add a quick tagged note, commit + push in one go. |
 | `newfix.sh short-title` | Start a troubleshooting write-up from the template. |
 | `new-folders.sh` / `new-folders.ps1` | Make a batch of folders (edit the list inside first). |
+| `rename.sh <old> <new>` | Rename/move a file or folder (git-tracked), commit + push. |
 | `make-folders.ps1` | Older folder-maker (kept for reference). |
