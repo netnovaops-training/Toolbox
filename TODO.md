@@ -11,3 +11,6 @@ My learning to-dos. Tick a box when done.
   5. `git push -u origin feature/my-first-pr`  (prints a PR link)
   Part B — on GitHub: open the PR (feature → main), review, Merge, delete the branch.
   Part C — back in Termux: `git switch main && git pull` (and delete the local branch).
+- [ ] **Try `newfix.sh`** (haven't run it yet) — tomorrow. #git #toolbox
+  `bash code/local/newfix.sh short-title`  (note the slash: code/local/ ... )
+  Then open the new file, fill the XXX, and: `git add knowledge/troubleshooting/ && git commit -m "Troubleshooting: short-title" && git push`
