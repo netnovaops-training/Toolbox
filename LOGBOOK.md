@@ -10,7 +10,7 @@ sorted automatically. Each title opens the full write-up.
 
 Tickets still being worked on (on their own branches) are listed in [OPEN.md](OPEN.md).
 
-Jump to: [Timeline](#timeline) · [Open](#open--ongoing) · [Resolved](#resolved--completed) · [By type](#by-type) · [By language](#by-language) · [By branch](#by-branch) · [Open tickets](OPEN.md) · [Career jacket](JACKET.md)
+Jump to: [Timeline](#timeline) · [Open](#open--ongoing) · [Resolved](#resolved--completed) · [By type](#by-type) · [By topic](#by-topic) · [By language](#by-language) · [By branch](#by-branch) · [Open tickets](OPEN.md) · [Career jacket](JACKET.md)
 
 ## Timeline
 
@@ -50,9 +50,9 @@ _None yet._
 
 _None yet._
 
-## By language
+## By topic
 
-Click a technology to see only its entries.
+Every tag - tools, tech and subjects. Click one to see only its entries.
 
 <details>
 <summary><b>docker</b> (1)</summary>
@@ -71,6 +71,12 @@ Click a technology to see only its entries.
 | 2026-10-15 | Troubleshooting | [Container volume permission denied](knowledge/troubleshooting/2026-10-15-container-volume-permission-denied.md) | resolved |
 
 </details>
+
+## By language
+
+Only the programming languages, so code work is easy to find.
+
+_No code entries yet. Tag one with a language (python, rust, bash...) and it appears here._
 
 ## By branch
 

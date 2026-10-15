@@ -68,8 +68,13 @@ or a pull request opens, closes or merges. Click a ticket to open it.
 `bash code/local/note.sh "did a thing #tag"` -> `knowledge/daily-log/quick-notes.md`.
 End-of-day recap: `knowledge/daily-log/_daily-template.md`.
 
-**Tech tags** (the `[docker, linux]` part) drive the "By language" view in the
-logbook - tag Python work `python` and Rust work `rust` and they sort themselves.
+**Tags (the words after the title):** any word works - `sso`, `authelia`, `ipv6`, `docker`,
+`python`. Each becomes its own section in the logbook's **By topic** view and in the
+career jacket. Programming languages (python, rust, bash, powershell, go, sql...) also
+show up in **By language** on their own. One word per tag, dashes for two words
+(`reverse-proxy`), keep the same spelling each time. A language it doesn't know? Add a
+`lang: [zig]` line to the entry's top block. Example:
+`bash code/local/newentry.sh install sso-setup authelia sso oidc`
 
 ## 4. Tags
 - Type `#tag` right in any note (e.g. `#networking #junsgarden`).

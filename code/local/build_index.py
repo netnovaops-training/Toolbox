@@ -29,6 +29,14 @@ TYPE_LABEL = {"project": "Projects", "install": "Installs",
 TYPE_COUNT = {"project": ("project", "projects"), "install": ("install", "installs"),
               "troubleshooting": ("troubleshooting", "troubleshooting"),
               "learning": ("learning note", "learning notes")}
+# programming languages the "By language" view recognises in the tech list by itself;
+# anything else can be named in an entry's optional `lang:` line, e.g. lang: [zig]
+LANGUAGES = {
+    "bash", "shell", "sh", "zsh", "powershell", "python", "rust", "go", "golang",
+    "javascript", "js", "typescript", "ts", "node", "nodejs", "java", "kotlin", "swift",
+    "c", "cpp", "c++", "csharp", "c#", "dotnet", "ruby", "php", "perl", "lua", "r",
+    "sql", "html", "css", "dart", "scala", "haskell", "elixir", "awk", "sed",
+}
 STATUSES = ["open", "in-progress", "blocked", "resolved"]
 OPEN = {"open", "in-progress", "blocked"}
 REQUIRED = ["type", "title", "date", "branch", "tech", "status"]
@@ -91,6 +99,8 @@ def load_entries():
                     problems.append(f"{k} '{v}' is not YYYY-MM-DD")
             if not isinstance(fields.get("tech", []), list):
                 problems.append("tech must be a list, e.g. [docker, linux]")
+            if "lang" in fields and fields["lang"] != "" and not isinstance(fields["lang"], list):
+                problems.append("lang must be a list, e.g. [zig]")
             if fields.get("status") == "resolved":
                 for k in ("summary", "lesson"):
                     if is_placeholder(fields.get(k, "")):
@@ -158,12 +168,19 @@ def details(summary, body):
     return f"<details>\n<summary>{summary}</summary>\n\n{body}\n</details>\n"
 
 
+def langs(e):
+    """Programming languages for an entry: known ones in tech, plus its lang: list."""
+    extra = e.get("lang") if isinstance(e.get("lang"), list) else []
+    return sorted({t for t in e["tech"] if t in LANGUAGES} | set(extra))
+
+
 def build_logbook(entries):
     by_type = {t: [e for e in entries if e["type"] == t] for t in TYPE_ORDER}
     open_rows = [e for e in entries if e["status"] in OPEN]
     done_rows = [e for e in entries if e["status"] == "resolved"]
     techs = sorted({t for e in entries for t in e["tech"]}) + (
         ["untagged"] if any(not e["tech"] for e in entries) else [])
+    languages = sorted({lang for e in entries for lang in langs(e)})
     branches = sorted({e["branch"] for e in entries})
 
     counts = " · ".join(plural(len(by_type[t]), *TYPE_COUNT[t]) for t in TYPE_ORDER)
@@ -183,7 +200,7 @@ def build_logbook(entries):
         "",
         "Jump to: [Timeline](#timeline) · [Open](#open--ongoing) · "
         "[Resolved](#resolved--completed) · [By type](#by-type) · "
-        "[By language](#by-language) · [By branch](#by-branch) · "
+        "[By topic](#by-topic) · [By language](#by-language) · [By branch](#by-branch) · "
         "[Open tickets](OPEN.md) · [Career jacket](JACKET.md)",
         "",
         "## Timeline",
@@ -203,14 +220,23 @@ def build_logbook(entries):
     for t in TYPE_ORDER:
         out += [f"### {TYPE_LABEL[t]} ({len(by_type[t])})", "",
                 table(by_type[t], [COL_DATE, COL_TITLE, COL_TECH, COL_STATUS])]
-    out += ["## By language", "",
-            "Click a technology to see only its entries.", ""]
+    out += ["## By topic", "",
+            "Every tag - tools, tech and subjects. Click one to see only its entries.", ""]
     for tech in techs:
         rows = [e for e in entries if (tech in e["tech"]) or (tech == "untagged" and not e["tech"])]
         out.append(details(f"<b>{tech}</b> ({len(rows)})",
                            table(rows, [COL_DATE, COL_TYPE, COL_TITLE, COL_STATUS])))
     if not techs:
         out.append("_None yet._\n")
+    out += ["## By language", "",
+            "Only the programming languages, so code work is easy to find.", ""]
+    for lang in languages:
+        rows = [e for e in entries if lang in langs(e)]
+        out.append(details(f"<b>{lang}</b> ({len(rows)})",
+                           table(rows, [COL_DATE, COL_TYPE, COL_TITLE, COL_STATUS])))
+    if not languages:
+        out.append("_No code entries yet. Tag one with a language (python, rust, bash...) "
+                   "and it appears here._\n")
     out += ["## By branch", "",
             "The git branch each piece of work was done on.", ""]
     for b in branches:
