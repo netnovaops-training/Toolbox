@@ -6,6 +6,9 @@
 #   or download a binary from https://github.com/crate-ci/typos/releases
 # If 'typos' isn't installed, this skips quietly — the GitHub check still runs on push.
 
+# make sure a cargo-installed 'typos' is found even in git's minimal hook environment
+export PATH="$HOME/.cargo/bin:$PATH"
+
 if command -v typos >/dev/null 2>&1; then
   if ! typos; then
     echo ""
