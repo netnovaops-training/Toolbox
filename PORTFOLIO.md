@@ -7,6 +7,8 @@
 **Jump to a skill:**
 [Networking](#networking) · [Linux](#linux) · [Containers](#containers) · [Security](#security) · [Scripting](#scripting) · [Git](#git) · [Troubleshooting](#troubleshooting)
 
+**Lessons learned, auto-collected:** [JACKET.md](JACKET.md) · every write-up, sorted: [LOGBOOK.md](LOGBOOK.md)
+
 **Certs:** CompTIA Security+ ✅ · targeting Network+/CCNA and Linux+ →
 see the [hiring scorecard](knowledge/notes/hiring-scorecard.md)
 

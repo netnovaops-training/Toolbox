@@ -47,3 +47,7 @@ in the *reasoning* (What I tried / Cause / Learned), not in word count.
 
 Small fix with little to say? Use `_quick.md` (Issue / Fix / Learned). Worth the full
 story? Use `_template.md` and hit the checklist above.
+
+The fields at the very top of each entry (the frontmatter: type, title, tech, status,
+summary, lesson) are what sort it in LOGBOOK.md and put the lesson in JACKET.md, so
+keep `summary` and `lesson` to one clear sentence each.

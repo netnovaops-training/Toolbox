@@ -1,60 +1,50 @@
-<!-- ============================================================
-     HOW TO USE THIS TEMPLATE  (delete this whole block when done)
+---
+type: __TYPE__
+title: __TITLE__
+date: __DATE__
+branch: __BRANCH__
+tech: __TECH__
+status: open
+opened: __DATE__
+closed:
+tags: []
+summary: XXX
+lesson: XXX
+---
 
-     1. Copy me to a dated file (this fills today's date for you):
-          cp knowledge/troubleshooting/_template.md "knowledge/troubleshooting/$(date +%F)-short-title.md"
-        Or name it by hand: 2026-MM-DD-short-title.md
-          - YYYY = year (2026)   MM = month (01-12)   DD = day (01-31)
-          - short-title = a few words, dashes-not-spaces (e.g. container-permission-denied)
+# __TITLE__
 
-     2. Replace every  XXX  and every  [ ... ]  with your real words.
+<!-- Fill every XXX. Keep it generic: no secrets, keys, real IPs, or homelab details.
+     Quality bar: knowledge/troubleshooting/GUIDELINE.md
+     Save progress:  bash code/local/worklog.sh "what I did"
+     Close it:       bash code/local/resolve.sh
+     status: open | in-progress | blocked | resolved  (the scripts set it for you) -->
 
-     3. Keep it generic: NO secrets, keys, real IPs, or homelab details.
-
-     4. Save it:  git add <the new file>  ->  git commit -m "Troubleshooting: <title>"  ->  git push
-
-     This master lives in git. If it ever gets messed up or deleted:
-          git restore knowledge/troubleshooting/_template.md     (or:  git pull)
-     ============================================================ -->
-
-> **what:** XXX (the problem in a few words)
-> **status:** solved          (or: ongoing)
-> **tags:** XXX, XXX          (e.g. docker, permissions)
-> **last-used:** YYYY-MM-DD   (change the MM and DD to today)
-
-# XXX — short title of the problem
-
-> **One line (for interviews/resume):**
-> "XXX broke — I XXX and XXX (the result)."
-> _example: "A container couldn't write its volume — I matched the container's UID
-> to the host folder's owner and the app came back up."_
+**One line (for interviews):** XXX broke - I XXX, and XXX (the result).
 
 ## The problem
-XXX — what broke, and when I noticed it (1-2 sentences).
+XXX - what broke, when, and what it stopped from working.
 
 ## Symptoms
 ```
-XXX   (paste the exact error line if it's short and has no secrets)
+XXX   (the exact error, if short and secret-free)
 ```
-XXX — what I actually saw / what it did wrong.
 
 ## What I tried
-- XXX  ->  XXX (what happened)
-- XXX  ->  XXX   <- include the ones that DIDN'T work; it shows how I think
+- XXX -> XXX (what happened)
+- XXX -> XXX   (include the dead ends - it shows how you think)
 
 ## The cause
-XXX — what was actually wrong, once I found it.
+XXX - the root cause, separate from the fix.
 
 ## The fix
 ```
-XXX   (the exact commands/steps that solved it — generic, no secrets)
+XXX   (exact, reproducible steps or commands)
 ```
 
 ## What I learned / how I'm more prepared
-- XXX — the takeaway in one line.
-- Next time I'll check XXX first, so this is faster / doesn't happen again.
+- XXX
+- Next time I'll check XXX first.
 
-<!-- Before committing:
-  [ ] one-line interview version filled in
-  [ ] no secrets, keys, real IPs, or homelab details
-  [ ] "what I learned" is filled in (the part employers care about) -->
+## Work log
+- __DATE__ - opened
