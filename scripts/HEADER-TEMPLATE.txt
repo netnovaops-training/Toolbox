@@ -1,0 +1,19 @@
+Reusable header for scripts I write. Paste on top, change the one-line summary.
+
+Bash / Python / shell (# comments):
+  # SPDX-License-Identifier: MIT
+  # Copyright (c) 2026 Jason A. Gibson
+  # <what this script does, in one line>
+
+PowerShell:
+  # SPDX-License-Identifier: MIT
+  # Copyright (c) 2026 Jason A. Gibson
+  # <what this script does, in one line>
+
+Rust / JavaScript (// comments):
+  // SPDX-License-Identifier: MIT
+  // Copyright (c) 2026 Jason A. Gibson
+  // <what this does, in one line>
+
+For code I COPIED from somewhere else: keep THEIR copyright line too,
+and add a row to SOURCES.md (what, where from, licence).
