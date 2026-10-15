@@ -5,7 +5,7 @@
 > **tags:** commands, automation, git, cheatsheet
 > **last-used:** 2026-10-15
 
-Scripts live in `code/mine/`. Notes/docs are `.md` (renders nicely, searchable);
+Scripts live in `code/scripts/`. Notes/docs are `.md` (renders nicely, searchable);
 runnable things are `.sh`. Run scripts from anywhere in the repo.
 
 ## Quick note (one line, tagged)

@@ -13,7 +13,7 @@ Everything in this repo and how to use it. Written 2026-10-15.
 | Folder / file | What it's for |
 |---|---|
 | `learn/` | The lessons, in order (start at `learn/START-HERE.md`). |
-| `code/` | `mine/` = code I wrote · `useful/` = snippets I reuse. |
+| `code/` | `mine/` = code I wrote · `useful/` = snippets I reuse · `scripts/` = automation tools. |
 | `knowledge/` | `cheatsheets/`, `notes/`, `troubleshooting/`, `daily-log/`, `documents/`, `cert-prep/`. |
 | `infra/` | Notes by ops topic (networking, etc.). |
 | `PORTFOLIO.md` | My professional page, browsable by skill. |
