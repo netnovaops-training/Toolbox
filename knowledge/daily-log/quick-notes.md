@@ -31,3 +31,4 @@ git commit -am "note" && git push
 
 ## Notes
 - 2026-10-15 — set up quick-notes with in-line #tags  #toolbox #notes
+2026-10-15 - test scripts #debug #script
