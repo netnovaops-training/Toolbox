@@ -30,6 +30,7 @@ commands to run). The commands come from the book, adapted and commented.
 **Then systems**
 5. **[05-system-and-performance](05-system-and-performance/)** — `vmstat`, `strace`, `fuser` — what a box is doing and why it's slow.
 6. **[06-security-and-crypto](06-security-and-crypto/)** — `openssl`, `gpg` — certs, keys, encryption.
+7. **[08-permissions-and-root](08-permissions-and-root/)** — permissions, users, sudo/root, and container permission troubles. A core sysadmin skill — expect it in interviews.
 
 ## Reference & docs (the dense stuff — scan it so I don't miss anything)
 
