@@ -14,6 +14,8 @@ YYYY-MM-DD — what I did or changed  #tag #tag
 **Tags** are just `#word` typed in the line. They show as text and are **searchable**
 on GitHub (search box → type `#networking` to pull up every note with it).
 
+Click any tag in [TAGS.md](../../TAGS.md) to see every note that uses it (live search).
+
 Common tags to reuse (pick any, make new ones freely):
 `#networking` `#linux` `#docker` `#security` `#scripting` `#git` `#dns` `#caddy`
 Project tags: `#homelab` `#junsgarden` `#toolbox` `#career` `#certs`
