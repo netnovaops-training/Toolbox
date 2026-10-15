@@ -22,7 +22,7 @@ portfolio while I build the skills.
 | Folder | What's in it |
 |---|---|
 | **learn/** | The lessons, in the order to work through them (START-HERE.md). |
-| **code/** | `mine/` — scripts I wrote. `useful/` — snippets I collected and reuse (credited). |
+| **code/** | `mine/` — code I wrote. `useful/` — snippets I collected and reuse (credited). `local/` — my automation scripts (note, newfix, rename, folders). |
 | **infra/** | Notes by ops topic: networking, containers, security, os, cloud. |
 | **knowledge/** | `cheatsheets/`, `notes/` (my guides), `documents/` (links), `cert-prep/`. |
 | **ai/** | AI tooling notes (later). |
