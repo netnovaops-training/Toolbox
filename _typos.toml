@@ -1,0 +1,14 @@
+# Spell-check settings for the `typos` checker.
+# Add words here when it flags something that is correct (a command, a name).
+
+[default.extend-words]
+# e.g. a command or abbreviation the checker doesn't know:
+# "ba" = "ba"
+
+[files]
+# don't spell-check these:
+extend-exclude = [
+  "*.min.js",
+  "*.lock",
+  "LICENSE",
+]
