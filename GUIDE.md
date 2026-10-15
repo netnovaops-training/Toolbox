@@ -55,7 +55,7 @@ Pick the size that fits:
 - **`knowledge/notes/using-md-files-in-git.md`** — how markdown-in-git works.
 
 ## 7. Make folders fast
-- **`code/mine/new-folders.sh`** / **`new-folders.ps1`** — edit the list, run it, it makes folders and keeps them in git.
+- **`code/scripts/new-folders.sh`** / **`new-folders.ps1`** — edit the list, run it, it makes folders and keeps them in git.
 
 ## 8. The git flow (every time)
 ```
