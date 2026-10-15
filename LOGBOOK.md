@@ -5,8 +5,8 @@
 Every troubleshooting fix, install, project and learning note I've written up,
 sorted automatically. Each title opens the full write-up.
 
-**2 entries** - 1 project · 0 installs · 1 troubleshooting · 0 learning notes  
-**1 open** · **1 resolved**
+**3 entries** - 2 projects · 0 installs · 1 troubleshooting · 0 learning notes  
+**2 open** · **1 resolved**
 
 Tickets still being worked on (on their own branches) are listed in [OPEN.md](OPEN.md).
 
@@ -20,12 +20,14 @@ Newest first.
 |---|---|---|---|---|
 | 2026-10-15 | Project | [add branches to flow](knowledge/projects/2026-10-15-add-branches-to-flow.md) | git, github | in-progress |
 | 2026-10-15 | Troubleshooting | [Container volume permission denied](knowledge/troubleshooting/2026-10-15-container-volume-permission-denied.md) | docker, linux | resolved |
+| 2026-10-15 | Project | [portfolio redesign](knowledge/projects/2026-10-15-portfolio-redesign.md) | markdown, github | in-progress |
 
 ## Open / ongoing
 
 | Date | Type | Title | Status | Branch |
 |---|---|---|---|---|
 | 2026-10-15 | Project | [add branches to flow](knowledge/projects/2026-10-15-add-branches-to-flow.md) | in-progress | [`project/add-branches-to-flow`](https://github.com/netnovaops-training/Toolbox/tree/project/add-branches-to-flow) |
+| 2026-10-15 | Project | [portfolio redesign](knowledge/projects/2026-10-15-portfolio-redesign.md) | in-progress | [`project/portfolio-redesign`](https://github.com/netnovaops-training/Toolbox/tree/project/portfolio-redesign) |
 
 ## Resolved / completed
 
@@ -35,11 +37,12 @@ Newest first.
 
 ## By type
 
-### Projects (1)
+### Projects (2)
 
 | Date | Title | Tech | Status |
 |---|---|---|---|
 | 2026-10-15 | [add branches to flow](knowledge/projects/2026-10-15-add-branches-to-flow.md) | git, github | in-progress |
+| 2026-10-15 | [portfolio redesign](knowledge/projects/2026-10-15-portfolio-redesign.md) | markdown, github | in-progress |
 
 ### Installs (0)
 
@@ -78,11 +81,12 @@ Every tag - tools, tech and subjects. Click one to see only its entries.
 </details>
 
 <details>
-<summary><b>github</b> (1)</summary>
+<summary><b>github</b> (2)</summary>
 
 | Date | Type | Title | Status |
 |---|---|---|---|
 | 2026-10-15 | Project | [add branches to flow](knowledge/projects/2026-10-15-add-branches-to-flow.md) | in-progress |
+| 2026-10-15 | Project | [portfolio redesign](knowledge/projects/2026-10-15-portfolio-redesign.md) | in-progress |
 
 </details>
 
@@ -92,6 +96,15 @@ Every tag - tools, tech and subjects. Click one to see only its entries.
 | Date | Type | Title | Status |
 |---|---|---|---|
 | 2026-10-15 | Troubleshooting | [Container volume permission denied](knowledge/troubleshooting/2026-10-15-container-volume-permission-denied.md) | resolved |
+
+</details>
+
+<details>
+<summary><b>markdown</b> (1)</summary>
+
+| Date | Type | Title | Status |
+|---|---|---|---|
+| 2026-10-15 | Project | [portfolio redesign](knowledge/projects/2026-10-15-portfolio-redesign.md) | in-progress |
 
 </details>
 
@@ -124,5 +137,16 @@ The git branch each piece of work was done on.
 | Date | Type | Title | Status |
 |---|---|---|---|
 | 2026-10-15 | Project | [add branches to flow](knowledge/projects/2026-10-15-add-branches-to-flow.md) | in-progress |
+
+</details>
+
+<details>
+<summary><code>project/portfolio-redesign</code> (1)</summary>
+
+[Open this branch on GitHub](https://github.com/netnovaops-training/Toolbox/tree/project/portfolio-redesign)
+
+| Date | Type | Title | Status |
+|---|---|---|---|
+| 2026-10-15 | Project | [portfolio redesign](knowledge/projects/2026-10-15-portfolio-redesign.md) | in-progress |
 
 </details>

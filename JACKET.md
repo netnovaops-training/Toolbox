@@ -5,7 +5,7 @@
 Lessons from real work, rolled up automatically from the [logbook](LOGBOOK.md).
 Each one links to the full write-up and to the branch where the work happened.
 
-**2 lessons** across **4 technologies**.
+**3 lessons** across **5 technologies**.
 
 ## docker
 
@@ -21,8 +21,15 @@ Each one links to the full write-up and to the branch where the work happened.
 
 - **add branches to flow** (2026-10-15) _(in-progress)_ - Work goes on a branch and reaches main only through a reviewed pull request, so mistakes get caught before they land.  
   [Write-up](knowledge/projects/2026-10-15-add-branches-to-flow.md) · [Branch `project/add-branches-to-flow`](https://github.com/netnovaops-training/Toolbox/tree/project/add-branches-to-flow)
+- **portfolio redesign** (2026-10-15) _(in-progress)_ - A portfolio should show what I built and what it did in a few lines, and link to the detail instead of repeating it.  
+  [Write-up](knowledge/projects/2026-10-15-portfolio-redesign.md) · [Branch `project/portfolio-redesign`](https://github.com/netnovaops-training/Toolbox/tree/project/portfolio-redesign)
 
 ## linux
 
 - **Container volume permission denied** (2026-10-15) - Container permission errors are usually a UID/GID mismatch - compare the numbers with id and ls -ln instead of reaching for chmod 777.  
   [Write-up](knowledge/troubleshooting/2026-10-15-container-volume-permission-denied.md) · [Branch `main`](https://github.com/netnovaops-training/Toolbox/tree/main)
+
+## markdown
+
+- **portfolio redesign** (2026-10-15) _(in-progress)_ - A portfolio should show what I built and what it did in a few lines, and link to the detail instead of repeating it.  
+  [Write-up](knowledge/projects/2026-10-15-portfolio-redesign.md) · [Branch `project/portfolio-redesign`](https://github.com/netnovaops-training/Toolbox/tree/project/portfolio-redesign)
