@@ -54,8 +54,20 @@ Pick the size that fits:
 - **`knowledge/documents/reference.md`** — links into the big book chapters.
 - **`knowledge/notes/using-md-files-in-git.md`** — how markdown-in-git works.
 
-## 7. Make folders fast
-- **`code/local/new-folders.sh`** / **`new-folders.ps1`** — edit the list, run it, it makes folders and keeps them in git.
+## 7. My scripts (in `code/local/`)
+**How to run one:** always `bash` + the full path + your arguments, from the repo root.
+NOT bare `note.sh` (that errors "command not found"). `git pull` first so you have the latest.
+```
+bash code/local/note.sh "fixed the Caddy proxy #caddy #networking"   # quick tagged note -> commit -> push
+bash code/local/newfix.sh container-permission-denied                # start a troubleshooting write-up
+bash code/local/new-folders.sh                                       # make a batch of folders (edit the list first)
+bash code/local/rename.sh code/old code/new                         # rename/move a file or folder, tracked + pushed
+```
+Windows (PowerShell) version of the folder maker:
+```
+powershell -ExecutionPolicy Bypass -File code/local/new-folders.ps1
+```
+Each script is listed in `code/local/README.md`.
 
 ## 8. The git flow (every time)
 ```
