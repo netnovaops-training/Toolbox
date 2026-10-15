@@ -6,6 +6,7 @@ fix it, and write down what stuck. This repo is that process in the open — and
 portfolio while I build the skills.
 
 **👉 [PORTFOLIO.md](PORTFOLIO.md)** — my progress, browsable by skill (networking, Linux, containers, security…).
+**📖 [GUIDE.md](GUIDE.md)** — how everything here works, with copy-paste shortcuts.
 
 ## How I use it
 
