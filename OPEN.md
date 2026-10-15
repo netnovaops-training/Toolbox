@@ -11,4 +11,4 @@ Pick one up: `git switch <branch> && git pull`, then `bash code/local/worklog.sh
 
 | Status | Ticket | Type | Tech | Opened | Last update | Branch | Pull request |
 |---|---|---|---|---|---|---|---|
-| **open** | [add branches to flow](https://github.com/netnovaops-training/Toolbox/blob/project/add-branches-to-flow/knowledge/projects/2026-10-15-add-branches-to-flow.md) | Project | git, github | 2026-10-15 | 2026-10-15 | [`project/add-branches-to-flow`](https://github.com/netnovaops-training/Toolbox/tree/project/add-branches-to-flow) | [PR #3](https://github.com/netnovaops-training/Toolbox/pull/3) (draft) |
+| **in-progress** | [add branches to flow](https://github.com/netnovaops-training/Toolbox/blob/project/add-branches-to-flow/knowledge/projects/2026-10-15-add-branches-to-flow.md) | Project | git, github | 2026-10-15 | 2026-10-15 | [`project/add-branches-to-flow`](https://github.com/netnovaops-training/Toolbox/tree/project/add-branches-to-flow) | [PR #3](https://github.com/netnovaops-training/Toolbox/pull/3) (draft) |
