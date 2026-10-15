@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Pre-commit spell-check. Blocks the commit if 'typos' finds a misspelling.
+# Enable once per clone:   git config core.hooksPath .githooks
+# Needs the 'typos' tool installed:
+#   PC (has Rust):   cargo install typos-cli
+#   or download a binary from https://github.com/crate-ci/typos/releases
+# If 'typos' isn't installed, this skips quietly — the GitHub check still runs on push.
+
+if command -v typos >/dev/null 2>&1; then
+  if ! typos; then
+    echo ""
+    echo "x  Spelling check failed. Fix the words above, or if one is correct add it"
+    echo "   to _typos.toml, then commit again. (To commit anyway: git commit --no-verify)"
+    exit 1
+  fi
+  echo "ok  spelling clean"
+else
+  echo "i  'typos' not installed - skipping local spell-check (GitHub still checks on push)."
+fi
