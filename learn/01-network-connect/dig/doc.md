@@ -91,6 +91,63 @@ the server. No answer → DNS is the problem. Wrong answer → stale cache or a 
 record. Right answer but still no connection → the problem is lower down
 (routing, firewall, the service itself), so move to `curl`, `nc`, or `tcpdump`.
 
+## More options that earn their keep on the job
+
+- `+noall +answer` — the clean everyday view: drops the comment/question/stats
+  noise and shows only answer lines (name, TTL, type, value). Pair with
+  `+ttlid` if you want the TTL emphasised.
+- `+trace` — walk the delegation from the root down. Read it top to bottom: root
+  servers → TLD (`.com`) servers → the domain's authoritative servers → the final
+  answer. If the trace dies partway, the break is at that level of delegation.
+- `+dnssec` — show DNSSEC signature records (RRSIG). You don't need the crypto
+  detail yet, but recognising the `ad` flag (authenticated data) in output is a
+  job-relevant literacy point.
+- `-f namelist.txt` — **batch mode**: look up a whole file of names in one run.
+  Perfect for auditing a list of hostnames.
+- `+norecurse` — ask a server for *only what it already knows* (don't let it go
+  ask others). Querying an authoritative server with `+norecurse` tells you the
+  real record; querying a resolver tells you the cached one.
+- `CAA` / `SRV` / `SOA` record types — CAA says which CAs may issue certs for a
+  domain (comes up in TLS work); SRV locates services; SOA carries the zone's
+  serial and timers (watch the serial to confirm a zone change propagated).
+
+## How to read the output (deeper)
+
+- **The flags line** (`;; flags: qr rd ra ad;`) is worth knowing: `aa` =
+  authoritative answer (you asked the owning server), `ra` = recursion available,
+  `ad` = DNSSEC-authenticated. An answer with `aa` is the source of truth; one
+  without is somebody's cache.
+- **AUTHORITY / ADDITIONAL sections** appear on fuller output and name the servers
+  responsible — useful when an answer looks wrong and you want to go straight to
+  the authoritative source with `dig @that-ns name +norecurse`.
+- **Watch the TTL count down.** Run the same `dig` twice a few seconds apart
+  against a caching resolver; a shrinking TTL means you're hitting a cache, and
+  tells you how long a stale answer will linger after a change.
+
+## Combine it (pipe dig into earlier-lesson tools)
+
+Because `+short` prints bare values, one per line, it chains beautifully:
+
+```bash
+# Reverse-lookup every A record a name has (dig -> xargs -> dig, lesson 03/04):
+dig example.com +short | xargs -rn1 dig +short -x
+
+# Compare two resolvers and show only the difference (diff; silent = they agree):
+diff <(dig @1.1.1.1 example.com +short) <(dig @9.9.9.9 example.com +short) \
+  && echo "resolvers agree"
+
+# Ask every authoritative NS the same question — do they all match? (loop + dig):
+for ns in $(dig example.com NS +short); do
+  printf '%s -> %s\n' "$ns" "$(dig @"$ns" example.com +short | paste -sd, -)"
+done
+
+# Audit a file of hostnames, flagging any that fail to resolve (while-read + awk):
+while read -r name; do
+  ip=$(dig "$name" +short | tail -n1)
+  printf '%s\t%s\n' "$name" "${ip:-NO-ANSWER}"
+done < names.txt | column -t
+```
+
 ## Common mistakes
 
 - **Trusting one resolver.** Your local resolver may be caching an old answer.

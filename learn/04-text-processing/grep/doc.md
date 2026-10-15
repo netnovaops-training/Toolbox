@@ -72,6 +72,64 @@ Anchors: `^` = start of line, `$` = end of line. So `^$` is a blank line, and
 - **Leading dashes.** `grep -- --flag file` — without the `--`, grep thinks
   `--flag` is an option.
 
+## Job-relevant depth
+
+### Flags that save you during an incident
+- `-C 3` (also `-A` after / `-B` before) — show **context** lines around each
+  match. During log triage you almost always want the lines *around* the error,
+  not just the error line. `grep -C5 ERROR app.log` is a daily move.
+- `-o` — print only the matched part, not the whole line. The key to *extracting*
+  with grep: `grep -oE '[0-9]{1,3}(\.[0-9]{1,3}){3}' access.log` pulls every IP.
+- `-c` — count matching lines; `-m 5` — stop after 5 matches (fast on huge logs).
+- `-w` — whole word (so `grep -w foo` doesn't hit `foobar`); `-x` — whole line.
+- `-l` / `-L` — list files that *do* / *do not* contain a match (no lines shown).
+- `-R --include='*.conf' --exclude-dir=.git` — recurse but scope it. `--include`
+  and `--exclude-dir` are what make a tree-wide search usable.
+- `-P` — Perl-compatible regex (GNU grep): lookahead, `\d`, `\s`, non-greedy
+  `*?`. Reach for `-P` when `-E` can't express it.
+- `-z` / `-Z` — NUL-separated, to pair safely with `find -print0` / `xargs -0`.
+
+### grep -F and fixed strings
+If you're searching for a literal string full of regex metacharacters (an IP, a
+path, a version like `1.2.3`), `-F` (or `fgrep`) treats it literally and is
+faster. No more escaping every `.`.
+
+## Reading tricky output
+
+- `-r` across files prints `path:line:text`; `--include` keeps that readable.
+- `grep -c` prints `0` for files with no match — useful, but means "zero", not
+  an error.
+- With `-o`, you get one line *per match*, so a line with three matches becomes
+  three output lines — perfect before `sort | uniq -c`.
+- Exit status matters in scripts: grep returns `0` if it found something, `1` if
+  not, `2` on error. `if grep -q PATTERN file; then ...` is the idiomatic test
+  (`-q` = quiet, no output, just the exit code).
+
+## Common troubleshooting
+
+- **"Binary file matches" instead of the lines.** You hit a binary (or a file
+  with a stray NUL); add `-a` to treat it as text or `-I` to skip binaries.
+- **"My regex matched too much."** Basic regex (no `-E`) treats `+`, `?`, `{`,
+  `(`, `|` as *literal* characters. Either escape them or use `-E`/`-P`.
+- **"It's slow on a huge tree."** Scope with `--include`/`--exclude-dir`, or let
+  `find` pick the files and pipe them in.
+
+## Combine it
+
+grep is the *filter* at the front of most log pipelines:
+```
+# Top 10 client IPs hitting your site (grep extracts, the rest ranks):
+grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' access.log | sort | uniq -c | sort -nr | head
+
+# Count errors per hour from a log:
+grep ERROR app.log | awk '{print $2}' | cut -c1-2 | sort | uniq -c
+
+# Search only tracked config files, with context, in a scoped tree:
+grep -RnC2 --include='*.conf' --exclude-dir=.git 'timeout' /etc/myapp
+```
+The recurring pattern is `grep` to *narrow*, then `awk`/`cut` to *extract a
+field*, then `sort | uniq -c | sort -nr` to *rank*. Build it one pipe at a time.
+
 ## sudo / root?
 
 `grep` only reads. You need root only when the *file itself* is readable solely

@@ -158,6 +158,41 @@ gpg --batch --list-packets archive.gpg
 - **Trusting "Good signature" blindly.** It proves the file matches *that key*.
   You still need confidence the key truly belongs to who you think.
 
+## A worked example: verifying a download the right way
+
+You download a tool's release tarball plus its `.asc` signature and a `SHA256SUMS`
+file. The job-grade workflow, in order:
+
+1. **Get the signer's key from a trustworthy source** — the project's website or a
+   keyserver — *not* the same mirror that served the file. `gpg --recv-keys <KEYID>`
+   or `gpg --import maintainer.pubkey`.
+2. **Verify the checksum file's signature:** `gpg --verify SHA256SUMS.asc SHA256SUMS`.
+   Look for "Good signature". This proves the *list of hashes* really came from the
+   maintainer.
+3. **Check the tarball against that trusted list:** `sha256sum -c SHA256SUMS`
+   (combining with the lesson's hashing idea). Now you've proven the file matches a
+   hash that was signed by a key you trust.
+
+The subtlety interviewers probe: "Good signature" only proves the file matches
+*that key*. If you grabbed the key from the same compromised mirror, you've proven
+nothing. The trust comes from where you got the key, not from the verify step.
+
+## Combine it with other tools
+
+- **Encrypt a whole directory**, not just one file, by combining with `tar`:
+  `tar czf - mydir | gpg -e -r you@example.com > mydir.tar.gz.gpg`. Decrypt the
+  same way: `gpg -d mydir.tar.gz.gpg | tar xzf -`. This is how encrypted backups
+  are actually made — stream a tar straight through gpg, no plaintext archive ever
+  hits disk.
+- **Find which key a file is encrypted to** by piping `--list-packets` through
+  `grep` (lesson 04): `gpg --list-packets secret.gpg | grep keyid`.
+- **Verify a batch of downloads** by pairing `gpg --verify` with `sha256sum -c`
+  (see the worked example above).
+- **Script decryption non-interactively** with `--batch --pinentry-mode loopback
+  --passphrase-file`, e.g. a cron job that decrypts an incoming feed — but never
+  put the passphrase on the command line (it shows up in `ps`); use a file with
+  `600` permissions (lesson 08).
+
 ## Does it need root?
 
 No. `gpg` works entirely inside **your own** `~/.gnupg` keyring and your own

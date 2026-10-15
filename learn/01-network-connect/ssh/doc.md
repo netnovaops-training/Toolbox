@@ -160,6 +160,71 @@ No. `ssh` the client runs as your normal user. You only need root **on the
 remote host** if the *commands you run there* need it (then you `sudo` once
 logged in). Running the ssh client itself as root is almost never right.
 
+## More options that earn their keep on the job
+
+- `-v` / `-vv` / `-vvv` — increasing **debug** output. This is how you solve
+  `Permission denied (publickey)`: run `ssh -vvv host` and read which keys your
+  client **offered** and how the server responded. "Offering public key ... /
+  Authentications that can continue: publickey" tells you the key was tried and
+  rejected (wrong key, or not in `authorized_keys`).
+- `-o ConnectTimeout=5` — fail fast instead of hanging when a host is unreachable
+  (essential in scripts and loops).
+- `-o ServerAliveInterval=30 -o ServerAliveCountMax=3` — send a keepalive every
+  30s and drop after 3 misses. This fixes the classic "my session freezes after a
+  few idle minutes" (a NAT/firewall timing the idle connection out).
+- `-o StrictHostKeyChecking=accept-new` — trust a brand-new host key but still
+  refuse a *changed* one. Useful for automation on hosts you know are new, without
+  blindly disabling the protection.
+- `-o BatchMode=yes` — never prompt (no password, no yes/no). In a script, a
+  prompt means a hang; BatchMode turns that into a clean failure you can detect.
+- `ControlMaster auto` + `ControlPath ~/.ssh/cm-%r@%h:%p` + `ControlPersist 10m`
+  (in `~/.ssh/config`) — **connection multiplexing**. The first `ssh` opens a
+  master connection; every later `ssh`/`scp`/`rsync` to the same host reuses it
+  in milliseconds instead of doing a fresh handshake. On a box you hit dozens of
+  times a day this is a huge, very "senior-looking" speedup.
+- `-D 1080` — a **dynamic SOCKS proxy**: turns the SSH tunnel into a general
+  proxy your browser or `curl --proxy socks5://localhost:1080` can use to reach a
+  remote network. (Local `-L` forwards one port; `-D` forwards everything.)
+
+## Harder real-world scenarios
+
+- **"It worked yesterday, now `Permission denied (publickey)`."** First check the
+  key is loaded: `ssh-add -l` (empty = start the agent and `ssh-add`). Then
+  `ssh -vvv` to see which key is offered. A frequent cause is permissions: SSH
+  silently ignores a key if `~/.ssh` or the key file is group/world-accessible —
+  the same `chmod 600` / `700` lesson from permissions (lesson 08) applies here.
+- **Session freezes on an otherwise fine network.** Add the `ServerAlive*`
+  options above; the firewall was dropping the idle flow.
+- **`Too many authentication failures`.** Your agent offered several keys and the
+  server cut you off before reaching the right one. Force the one key with
+  `-o IdentitiesOnly=yes -i ~/.ssh/the_key`.
+- **Automating across many hosts.** Combine `BatchMode=yes`, `ConnectTimeout`,
+  and a loop (below). One unreachable host must not hang the whole run.
+
+## Combine it (pipe SSH output into earlier-lesson tools)
+
+`ssh host 'command'` prints the remote command's output to *your* stdout, so
+everything you learned about `grep`/`awk`/`sort` (lesson 04) and `find`
+(lesson 03) works on it:
+
+```bash
+# Remote disk usage, worst mount first (awk + sort from lesson 04):
+ssh user@example.com 'df -h' | awk 'NR>1 {print $5, $6}' | sort -rn
+
+# Count established connections on the server, grouped by state:
+ssh user@example.com 'ss -tan' | awk 'NR>1 {print $1}' | sort | uniq -c | sort -rn
+
+# Find big log files remotely (find from lesson 03), newest first:
+ssh user@example.com 'find /var/log -type f -size +50M -printf "%s\t%p\n"' | sort -rn
+
+# Pull a remote config and search it locally without copying the file:
+ssh user@example.com cat /etc/nginx/nginx.conf | grep -n 'server_name'
+
+# Move a whole directory tree between two of your machines with a tar pipe
+# (no scp needed; streams straight down the ssh tunnel):
+tar czf - ./site | ssh user@example.com 'cd /srv && tar xzf -'
+```
+
 ## Common mistakes
 
 - **Private key permissions too open.** SSH refuses a private key that others

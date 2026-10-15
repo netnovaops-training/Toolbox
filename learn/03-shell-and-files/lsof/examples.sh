@@ -72,4 +72,39 @@ lsof / 2>/dev/null \
   | awk '{ if ($7 > 1048576) print $7/1048576 "MB " $9 " " $1 }' \
   | sort -n -u | tail | column -t || echo "  (run with sudo to see more)"
 
+# --- HARDER + COMBINE: listening ports with program, aligned ---------------
+# grep keeps only servers; awk pulls command/PID/name; sort -u de-dupes;
+# column -t aligns. Run with sudo on a real box to catch root-owned services.
+echo "== listeners: command PID name (aligned) =="
+lsof -i -P -n 2>/dev/null | grep LISTEN \
+  | awk '{print $1, $2, $9}' | sort -u | column -t | head \
+  || echo "  (none visible without sudo)"
+
+# --- HARDER + COMBINE: which processes hold the most files open ------------
+# An fd-leak hunt. awk pulls command+PID; sort|uniq -c counts per process;
+# sort -nr ranks. A process whose count only grows is usually leaking fds.
+echo "== processes by open-file count (top 5) =="
+lsof -nP 2>/dev/null | awk 'NR>1 {print $1, $2}' \
+  | sort | uniq -c | sort -nr | head -n 5 \
+  || echo "  (need sudo for the full picture)"
+
+# --- HARDER: terse PID output, the shape you'd feed to kill ----------------
+# -t prints ONLY PIDs, designed to pipe into kill/xargs. We only PRINT them —
+# never pipe straight to kill without eyeballing the list first.
+echo "== PIDs with a network file open (terse) — PREVIEW ONLY =="
+lsof -t -i 2>/dev/null | head || echo "  (none visible without sudo)"
+echo "   On a real box you'd confirm these PIDs, THEN: kill \$(lsof -t -i tcp:8080)"
+
+# --- HARDER: find a deleted-but-still-open file (phantom disk usage) -------
+# The 'df says full, du says not' classic. +L1 = link count < 1 = unlinked but
+# still held open, so its space isn't freed until the holder closes it.
+# We reproduce it safely: open a file, delete it while a process still holds it.
+echo "== deleted-but-held file demo =="
+( exec 8<>"$SCRATCH/ghost.txt"; echo data >&8; rm -f "$SCRATCH/ghost.txt"; sleep 2 ) &
+GHOST=$!
+sleep 0.3
+lsof -nP +L1 2>/dev/null | grep -i "$SCRATCH\|ghost\|deleted" \
+  || echo "  (none visible here without sudo; concept shown in comments)"
+wait "$GHOST" 2>/dev/null || true
+
 echo "Done. Scratch dir removed on exit."

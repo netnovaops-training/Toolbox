@@ -222,6 +222,49 @@ not passwords.)
   installed the wrong pair — the number one cause of "web server won't start
   after cert renewal."
 
+## A worked example: a cert that won't verify
+
+A browser or `curl` says "certificate verify failed" against
+`service.example.com`, but the cert looks fine when you open it. Nine times out of
+ten the problem is a **missing intermediate** — the server sent its leaf cert but
+not the chain up to a trusted root. Here's the reasoning and the commands:
+
+1. See what the server actually sends:
+   `echo | openssl s_client -connect service.example.com:443 -servername service.example.com -showcerts`
+   Count the `-----BEGIN CERTIFICATE-----` blocks. Just one? That's your bug — the
+   intermediate isn't being served.
+2. Confirm by asking openssl to verify the chain itself:
+   `echo | openssl s_client -connect service.example.com:443 -servername service.example.com`
+   and read the `Verify return code:` line at the bottom. `0 (ok)` is good;
+   `21 (unable to verify the first certificate)` means the chain is incomplete.
+3. Read the leaf's expiry and issuer to rule out the other common causes
+   (expired, or issued for the wrong name):
+   `... | openssl x509 -noout -dates -subject -issuer`.
+
+So three suspects, in order: expired (`notAfter` in the past), wrong name (domain
+not in the SAN list), or broken chain (missing intermediate). `s_client` plus
+`x509` settles which one every time — no guessing.
+
+## Combine it with other tools
+
+`openssl` subcommands are built to pipe into each other and into the lesson-04
+text tools:
+
+- **Read just the human parts of a live cert** (the single most useful combo):
+  `echo | openssl s_client -connect example.com:443 -servername example.com 2>/dev/null \
+  | openssl x509 -noout -dates -subject -issuer`.
+- **Chain one openssl into another** — connect, then decode:
+  `... s_client ... | openssl x509 -noout -text | grep -A1 'Subject Alternative Name'`
+  shows exactly which domains the cert covers.
+- **Compute days-until-expiry** by combining with `date` (great for a monitoring
+  script): read `notAfter`, convert both to epoch seconds with `date -d`, subtract.
+- **Verify a chain offline** against a CA file: `openssl verify -CAfile ca.pem cert.pem`
+  prints `OK` or the exact reason it failed.
+- **Pull one field out** with `grep`: `openssl x509 -noout -text -in cert.crt | grep -E 'Not After|DNS:'`.
+
+The habit: `genrsa`/`req` *make* material, `s_client` *fetches* it, `x509`/`req`
+*decode* it, and `grep`/`awk`/`date` turn the decode into a one-line answer.
+
 ## Does it need root?
 
 The crypto operations themselves (generating keys, making CSRs, inspecting,

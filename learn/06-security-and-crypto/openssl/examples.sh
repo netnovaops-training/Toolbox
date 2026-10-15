@@ -128,4 +128,47 @@ echo | timeout 10 openssl s_client -tls1_2 -connect example.com:443 \
   -servername example.com 2>/dev/null | grep -E "Protocol|Cipher" || \
   echo "(skipped: no network or TLS1.2 not offered)"
 
+echo "=== 15) COMBINE: build a throwaway CA, sign the CSR, VERIFY the chain ==="
+# This mirrors real life: a CA signs your CSR, and clients verify the leaf cert
+# against the CA. We make a test root CA, sign request_san.csr from example 6,
+# then prove the result chains to the CA with 'openssl verify'. All throwaway.
+openssl genrsa -out ca.key 2048 2>/dev/null
+chmod 600 ca.key
+openssl req -x509 -new -nodes -key ca.key -sha256 -days 3650 -out ca.crt \
+  -subj "/C=US/O=Example Test Root CA/CN=Example Test Root CA"
+# -CAcreateserial makes the serial-number file the CA needs on first sign.
+openssl x509 -req -in request_san.csr -CA ca.crt -CAkey ca.key -CAcreateserial \
+  -days 365 -sha256 -out signed.crt 2>/dev/null
+echo "verify the signed leaf against our CA (expect 'OK'):"
+openssl verify -CAfile ca.crt signed.crt
+echo "note the Issuer is now the CA, not the subject (contrast with self-signed #9):"
+openssl x509 -noout -issuer -subject -in signed.crt
+
+echo "=== 16) COMBINE with date: how many days until this cert expires? ==="
+# A real monitoring task: alert before a cert lapses. Read notAfter, convert
+# both it and 'now' to epoch seconds, subtract, divide by seconds-per-day.
+# (date -d is GNU date; guarded so it degrades gracefully if unavailable.)
+end="$(openssl x509 -noout -enddate -in signed.crt | cut -d= -f2)"
+if exp="$(date -d "$end" +%s 2>/dev/null)"; then
+  now="$(date +%s)"
+  echo "cert expires in $(( (exp - now) / 86400 )) days ($end)"
+else
+  echo "(date -d not available here; on Linux this prints days-to-expiry)"
+fi
+
+echo "=== 17) COMBINE: fetch a live chain and count the certs it sends ==="
+# A missing intermediate is the #1 'certificate verify failed' cause. Count the
+# BEGIN CERTIFICATE blocks the server sends: 1 often means a broken chain.
+# Also print the 'Verify return code' line — 0 (ok) is healthy. Network-gated.
+if echo | timeout 10 openssl s_client -connect example.com:443 \
+      -servername example.com 2>/dev/null >/dev/null; then
+  chain="$(echo | openssl s_client -connect example.com:443 -servername example.com \
+             -showcerts 2>/dev/null)"
+  echo "certificates in the chain: $(printf '%s\n' "$chain" | grep -c 'BEGIN CERTIFICATE')"
+  echo | openssl s_client -connect example.com:443 -servername example.com 2>/dev/null \
+    | grep -i "Verify return code" || true
+else
+  echo "(no network — skipping the live chain inspection)"
+fi
+
 echo "done — scratch dir and all test keys are about to be deleted"

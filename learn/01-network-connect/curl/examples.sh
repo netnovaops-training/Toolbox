@@ -60,3 +60,45 @@ for proto in http https ; do
   echo "--- ${proto} headers for ${domain} ---"
   curl -Iks -A "learning-curl" --location "${proto}://${domain}" || true
 done
+
+echo "=== 9) Timing breakdown: which layer is slow? (-w write-out) ==="
+# Splits the request into DNS / TCP connect / TLS / time-to-first-byte / total.
+# A big number in one column tells you WHERE the slowness is.
+curl -s -o /dev/null \
+  -w 'dns=%{time_namelookup} connect=%{time_connect} tls=%{time_appconnect} ttfb=%{time_starttransfer} total=%{time_total}\n' \
+  https://example.com || true
+
+echo "=== 10) Just the status code, for use in a condition ==="
+# -o /dev/null throws away the body; -w prints only the code. Handy in scripts.
+code=$(curl -s -o /dev/null -w '%{http_code}' https://example.com || echo "000")
+echo "   example.com returned HTTP $code"
+
+echo "=== 11) Average latency over N requests (curl + awk from lesson 04) ==="
+# Loop a few polite requests, print each total time, then awk the average.
+for i in 1 2 3; do
+  curl -s -o /dev/null -w '%{time_total}\n' https://example.com || echo "0"
+  sleep 1                              # be polite; never flood a server
+done | awk '{sum+=$1; n++} END {if (n) printf "   avg %.3fs over %d reqs\n", sum/n, n}'
+
+echo "=== 12) Pull a JSON field without jq (grep + sed) ==="
+# Rough-and-ready extraction when jq isn't installed. Points at a placeholder API.
+#   curl -s https://api.example.com/status | grep -o '"version":"[^"]*"' | sed 's/.*:"//; s/"//'
+echo "   (placeholder API — left as a comment)"
+
+echo "=== 13) Force a hostname to a specific backend with --resolve ==="
+# Test ONE server behind a load balancer, or a new box before you move DNS,
+# without editing /etc/hosts. Replace the IP with a machine YOU control.
+#   curl -sI --resolve example.com:443:192.168.1.50 https://example.com
+
+echo "=== 14) Fail-fast in a script: -f turns an HTTP 500 into a non-zero exit ==="
+# Without -f, curl prints the error page and 'succeeds'. With -f you can branch on it.
+if curl -fsS -o /dev/null --max-time 10 https://example.com; then
+  echo "   up (2xx/3xx)"
+else
+  echo "   curl exit $? — DNS=6 connect=7 timeout=28 http-error=22 (see the doc)"
+fi
+
+echo "=== 15) Save headers to a scratch file and grep one out ==="
+# Writes headers into the temp dir from example 4, then finds the Content-Type.
+curl -sI https://example.com -o "$work/headers.txt" || true
+echo -n "   "; grep -i '^content-type:' "$work/headers.txt" || echo "(no content-type line)"

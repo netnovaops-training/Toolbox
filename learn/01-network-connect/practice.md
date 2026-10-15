@@ -126,3 +126,63 @@ Study `curl/examples.sh` example 8 first, then make your own cleaner version.
 line before each section so the output is readable.
 **Check yourself:** running it on `example.com` prints the IP, then two tidy
 blocks of headers, with no crash if one protocol is unreachable.
+
+---
+
+### 11. Find the slow layer with curl's timing (harder)
+Use `curl -w` to print the DNS, connect, TLS, and time-to-first-byte split for
+`https://example.com`. Then say, if `time_namelookup` were large, which tool you
+would switch to and why.
+
+*Hint:* `-o /dev/null` to drop the body; `-w 'dns=%{time_namelookup} ...\n'`. A
+big DNS number points you back at `dig`.
+**Check yourself:** you can read the four numbers and name which layer each one
+measures.
+
+---
+
+### 12. Turn a failing curl into a diagnosis by exit code (harder)
+Run `curl -fsS` against (a) a name that can't resolve, (b) a port that's closed,
+and (c) a URL that returns a 500 if you can find one. Record `echo $?` each time
+and match the number to the layer that broke.
+
+*Hint:* 6 = DNS, 7 = connect, 28 = timeout, 22 = HTTP error (with `-f`). You can
+force a DNS failure with a made-up `.invalid` name.
+**Check yourself:** you can map at least three exit codes to the layer they mean.
+
+---
+
+### 13. Compare two resolvers and only flag disagreement (combines lesson 04)
+Write a one-liner that queries `example.com` on `@1.1.1.1` and `@9.9.9.9` with
+`+short` and prints something only when the two answers differ. Study
+`dig/examples.sh` example 10 first.
+
+*Hint:* `diff <(dig @1.1.1.1 ... +short) <(dig @9.9.9.9 ... +short)`. Process
+substitution `<(...)` hands each command's output to `diff` as a file.
+**Check yourself:** it stays quiet when the resolvers agree and shows the
+difference when they don't.
+
+---
+
+### 14. Audit a list of hostnames (combines find/grep/awk from lessons 03-04)
+Make a text file with a few hostnames (one per line, include one bogus name).
+Write a loop that resolves each with `dig +short` and prints the name plus its
+IP — or `NO-ANSWER` for the ones that fail. Then pipe the result through `grep`
+to show only the failures.
+
+*Hint:* `while read -r name; do ... done < names.txt`; capture the IP in a var and
+substitute a default with `${ip:-NO-ANSWER}`.
+**Check yourself:** the bogus name shows `NO-ANSWER` and your `grep` isolates it
+cleanly.
+
+---
+
+### 15. One remote command, parsed locally (combines lesson 04; needs a lab box)
+On a VM you own, run a single `ssh user@lab 'df -h'` and pipe the output through
+`awk`/`sort` to print each mount's use% worst-first. Do it without logging in
+interactively.
+
+*Hint:* `ssh host 'df -h' | awk 'NR>1 {print $5, $6}' | sort -rn`. The remote
+command's stdout is just text on your machine.
+**Check yourself:** you get a sorted usage list and never opened an interactive
+shell to do it.

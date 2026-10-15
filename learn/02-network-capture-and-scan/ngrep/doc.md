@@ -81,6 +81,51 @@ sudo ngrep -d lo -qt 'example.com' port 443
 sudo ngrep -d lo -qt -O /tmp/http-matches.pcap 'GET ' port 8080
 ```
 
+## More options that matter on the job
+
+- `-n <count>` — stop after N matching packets. Pairs with a tight pattern to
+  grab a sample and exit instead of watching forever.
+- `-x` — show the payload as **hex and ASCII** (like `tcpdump -X`), for when the
+  "text" isn't quite text and you need to see the bytes.
+- `-W single` / `-W byline` / `-W none` — how matched payloads are laid out.
+  `byline` honours real line breaks (readable HTTP/headers); `single` keeps each
+  match on one line (easier to pipe into `grep`/`awk`).
+- `-D` — when reading a pcap with `-I`, replay at the original packet timing
+  (usually you don't want this for analysis; know it exists).
+- A pattern of `''` (empty) matches **everything** — occasionally useful with a
+  BPF filter when you want ngrep's payload formatting but no content filter.
+
+## Harder real-world uses
+
+- **Watch DNS questions fly by.** On your own resolver traffic,
+  `sudo ngrep -d lo -q -W byline '' udp port 53` shows the names being looked up
+  — a quick way to see "what is this box resolving?" during an incident.
+- **Confirm a header the app claims it sends.** Match `'X-Request-Id'` on your
+  own plaintext port to prove the header is actually on the wire (not just in the
+  code). This is a common "is it really being sent?" tie-breaker.
+- **The plaintext-vs-TLS proof.** Run the same pattern on port 8080 (plain) and
+  port 443 (TLS): you'll match readable text on the first and nothing in the body
+  on the second. That contrast is the whole argument for encryption in one demo.
+
+## Combine it (feed matches into earlier-lesson tools)
+
+`ngrep -q` prints match headers and payloads to stdout, so `grep`/`awk`/`sort`
+(lesson 04) can mine them:
+
+```bash
+# Pull just the Host: values out of your own HTTP traffic and tally them:
+sudo ngrep -l -q -W single -d lo 'Host:' port 8080 \
+  | grep -oiE 'Host: [^ ]+' | sort | uniq -c | sort -rn
+
+# List the unique hostnames being queried over DNS (own traffic):
+sudo ngrep -l -q -W single -d lo '' udp port 53 \
+  | grep -oE '[A-Za-z0-9.-]+\.(com|net|org|local)' | sort -u
+
+# Capture matches to a pcap now, analyse offline later (no root to re-read):
+sudo ngrep -qt -O /tmp/hits.pcap 'GET ' -d lo port 8080
+ngrep -q -W byline -I /tmp/hits.pcap 'GET ' | grep -E '^GET '
+```
+
 ## Common mistakes
 
 - **Expecting results from HTTPS payloads.** Encrypted traffic has nothing

@@ -41,6 +41,26 @@ vmstat 1 10 -t -w > "$work/vmstat-trace.txt"
 echo "saved trace to: $work/vmstat-trace.txt"
 cat "$work/vmstat-trace.txt"
 
+echo "=== 7) COMBINE with awk (lesson 04): watch one column and flag trouble ==="
+# vmstat prints a table; awk turns it into a yes/no answer. Field 15 is 'id'
+# (CPU idle). 'NR>2' skips the header AND the since-boot first line. Here we
+# print any live sample where idle drops below 50% — a cheap "is it busy?" alert.
+# (10 samples so the demo ends; the '+0' forces awk to treat the field as a number.)
+vmstat 1 10 | awk 'NR>2 { if ($15+0 < 50) print "BUSY:", $0; else print "ok:", $15"% idle" }'
+
+echo "=== 8) COMBINE: capture a trace, then pull only the BAD samples ==="
+# Real workflow: record evidence, then grep/awk out just the lines that matter.
+# Field 16 is 'wa' (I/O wait). We save a trace, then list only high-wait samples
+# — exactly the lines you'd paste into a ticket to prove "it's disk-bound".
+vmstat 1 10 -t > "$work/trace.txt"
+echo "high I/O-wait samples (wa > 20), if any:"
+awk 'NR>2 && $16+0 > 20 { print }' "$work/trace.txt" || echo "   (none — box wasn't disk-bound during the sample)"
+
+echo "=== 9) COMBINE: average a column over the whole run ==="
+# Instead of eyeballing, compute the mean idle CPU across the samples. This is
+# how you answer "was it busy the whole time or just spiking?" with a number.
+vmstat 1 10 | awk 'NR>2 { s+=$15; n++ } END { if (n) printf "avg idle over %d samples: %.1f%%\n", n, s/n }'
+
 # Slab cache view (-m) is intentionally left out of the demo: it is rarely
 # needed day to day and prints a very long table. Run `vmstat -m` yourself
 # when you specifically want to inspect kernel object caches.

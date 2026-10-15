@@ -105,6 +105,60 @@ sudo tcpdump -n -i lo icmp
 sudo tcpdump -n -i lo -t -c 200 | awk '{print $3}' | cut -d. -f1-4 | sort | uniq -c | sort -nr | head
 ```
 
+## More filters and options that matter on the job
+
+- **Flag-based filters.** You can match specific TCP flags, which is how you
+  isolate connection *attempts* from established traffic:
+  - `'tcp[tcpflags] & tcp-syn != 0'` — packets with the SYN bit set (new
+    connections). Add `and tcp[tcpflags] & tcp-ack == 0` for SYN-only (the very
+    first packet of a handshake).
+  - `'tcp[tcpflags] & tcp-rst != 0'` — resets (a port actively refusing, or a
+    connection being torn down abruptly). A burst of these is a real signal.
+- **Network and range filters.** `net 192.168.1.0/24`, `portrange 8000-8100`,
+  `greater 1000` (packets over 1000 bytes). Combine with `and`/`or`/`not`:
+  `host 192.168.1.50 and not port 22` (everything to that host except your own
+  SSH session — stops your capture from recording itself).
+- **Rotating / size-limited capture for long runs.** `-G 60 -w cap-%H%M%S.pcap`
+  starts a new file every 60 seconds; `-C 10 -W 5` caps each file at 10 MB and
+  keeps only 5 (a ring buffer). This is how you leave a capture running to catch
+  an intermittent problem without filling the disk.
+- `-Z user` — drop root privileges to `user` after opening the interface (good
+  hygiene for an unattended capture). `-l` — line-buffer output so a live pipe
+  into `grep` shows matches immediately.
+
+## Reading the output (deeper)
+
+- **No SYN-ACK after your SYN** = the far end never answered. Service down or a
+  firewall dropping — the single most useful thing capture tells you (same signal
+  as `nc`'s hang, but now you can *see* it).
+- **A `[R]` (RST) right after your SYN** = the host is up but nothing is listening
+  on that port (the packet-level version of "Connection refused").
+- **The same sequence number sent again** = a **retransmission**: the sender
+  didn't get an ACK in time, which points at packet loss or a slow/overloaded
+  path. Repeated retransmits on a "slow app" are a strong clue the problem is the
+  network, not the application.
+
+## Combine it (capture, then process with earlier-lesson tools)
+
+The real workflow is *capture to a file, then analyse the file* — which turns
+packet data into something `grep`/`awk`/`sort` (lesson 04) can mine:
+
+```bash
+# Capture a sample to a scratch file (bounded so it can't run away):
+sudo tcpdump -n -i lo -c 500 -w /tmp/cap.pcap port 8080
+
+# Read it back and rank the top talkers by source IP (awk + sort + uniq):
+tcpdump -n -r /tmp/cap.pcap 2>/dev/null \
+  | awk '{print $3}' | cut -d. -f1-4 | sort | uniq -c | sort -rn | head
+
+# Count how many of each TCP flag appeared (SYN storms, RST floods stand out):
+tcpdump -n -r /tmp/cap.pcap 2>/dev/null \
+  | grep -oE 'Flags \[[^]]*\]' | sort | uniq -c | sort -rn
+
+# Live: tail the wire for one pattern (-l line-buffers so grep sees it at once):
+sudo tcpdump -l -n -i lo port 8080 | grep --line-buffered 'Flags \[S\]'
+```
+
 ## Common mistakes
 
 - **Wrong interface.** Capturing on `eth0` while your traffic goes over `wlan0`

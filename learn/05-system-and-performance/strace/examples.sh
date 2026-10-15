@@ -50,6 +50,27 @@ else
   echo "(nc not installed — skipping the bind example)"
 fi
 
+echo "=== 7) COMBINE with grep (lesson 04): find the failed file lookup ==="
+# strace writes to STDERR, so you MUST redirect 2>&1 before piping, or grep sees
+# nothing. Here we trace a 'cat' of a missing file and pull out just the failure.
+# This is THE everyday move: "why can't it find its config?" -> grep ENOENT.
+strace -e trace=openat cat /etc/does-not-exist.conf 2>&1 | grep ENOENT || true
+
+echo "=== 8) COMBINE: tally every error type a program hits ==="
+# Scan the whole trace for error codes (E followed by capitals), then count each.
+# A fast way to see 'is this a permissions problem or a missing-file problem?'
+# across a noisy run, without reading every line.
+strace ls /root /etc /nonexistent 2>&1 \
+  | grep -oE 'E[A-Z]+' | sort | uniq -c | sort -rn || true
+
+echo "=== 9) COMBINE: summary table, then read off the heaviest syscall ==="
+# -c tallies calls and time. We save it, show the header, and use awk to print
+# the single syscall with the most calls (skip the header/footer rows).
+strace -c -o "$work/summary.txt" ls -R /usr/share/doc >/dev/null 2>&1 || true
+echo "busiest syscall by call count:"
+awk 'NR>2 && $1 ~ /^[0-9]/ { if ($4+0 > max) { max=$4+0; name=$NF } } END { print name, "("max" calls)" }' \
+  "$work/summary.txt" || true
+
 # --- Patterns from the book you can adapt once you have a real PID ---
 # Attach to a running daemon (needs sudo if you don't own it); Ctrl-C detaches:
 #   sudo strace -f -p "$(pidof some-daemon)"

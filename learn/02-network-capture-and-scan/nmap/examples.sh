@@ -52,3 +52,34 @@ echo "=== 7) The makers' sanctioned practice target (gently, rarely) ==="
 # scanme.nmap.org is provided by nmap's authors FOR practice. Be light-handed.
 #   nmap -F scanme.nmap.org
 echo "   (public practice host — left as a comment so you run it deliberately)"
+
+echo "=== 8) Greppable output -> list of IPs with port 22 open (nmap + grep + awk) ==="
+# -oG - prints greppable output to stdout; grep the open SSH line, awk the IP.
+# The result is a clean host list you could feed straight into an ssh loop.
+#   sudo nmap -p22 --open -oG - 192.168.1.0/24 | grep '22/open' | awk '{print $2}'
+echo "   (scans YOUR lab subnet — left as a comment; swap in your real range)"
+
+echo "=== 9) Scan targets from a FILE and exclude the gateway (-iL / --exclude) ==="
+# Maintain your inventory as text; -iL reads it, --exclude keeps fragile hosts out.
+work="$(mktemp -d)"
+trap 'rm -rf "$work"' EXIT
+printf '127.0.0.1\n192.168.1.50\n' > "$work/targets.txt"
+echo "   built demo target list at $work/targets.txt"
+#   sudo nmap -F --open -iL $work/targets.txt --exclude 192.168.1.1
+
+echo "=== 10) Quick-but-meaningful: top 20 ports with the REASON column ==="
+# --top-ports 20 = the 20 most common; --reason explains each verdict (syn-ack/reset/...).
+# Safe to run against loopback right now (unprivileged -sT).
+nmap -sT --top-ports 20 --reason --open 127.0.0.1 \
+  || echo "   (install nmap to try this: apt/brew install nmap)"
+
+echo "=== 11) Safe NSE scripts on a host you own (read-only checks) ==="
+# --script safe stays in the read-only category. -sV adds version detection.
+# Stay in safe/default categories for learning; intrusive scripts need authorisation.
+#   sudo nmap -sV --script safe -p 22,80,443 192.168.1.50
+
+echo "=== 12) Baseline now, diff later: did a new port open? (ndiff) ==="
+# Save XML today and tomorrow, then ndiff shows exactly what changed. Monitoring 101.
+echo "   today:     sudo nmap -F -oX $work/baseline.xml 192.168.1.50"
+echo "   tomorrow:  sudo nmap -F -oX $work/today.xml 192.168.1.50"
+echo "   compare:   ndiff $work/baseline.xml $work/today.xml"

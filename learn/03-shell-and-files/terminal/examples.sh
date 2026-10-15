@@ -92,5 +92,56 @@ echo "Job control (Ctrl-Z, bg, disown -a) is interactive — try it live in a VM
 # $$ is the PID of THIS shell. Useful in scripts; printing it is harmless.
 echo "This shell's PID is $$"
 
+# --- See output AND save it at the same time (tee) -------------------------
+# A plain > can't show you the output and keep a copy; tee does both. It sits
+# in the middle of a pipe, copying stdin to the file AND passing it along.
+echo "== tee: screen + file together =="
+demo2() { echo "line A"; echo "line B"; }
+demo2 | tee saved.log                 # shows A and B, and writes them to saved.log
+echo "saved.log holds:"; cat saved.log
+# -a APPENDS instead of overwriting — how you grow an install/run log safely.
+demo2 | tee -a saved.log >/dev/null
+echo "after append, saved.log has $(wc -l < saved.log) lines"
+
+# --- Exit codes and $? ------------------------------------------------------
+# Every command sets $? (0 = success). This is how scripts make decisions.
+echo "== exit codes =="
+true;  echo "true  -> \$? = $?"        # 0
+false; echo "false -> \$? = $?"        # 1
+# In a pipeline, $? is only the LAST stage... unless pipefail is on.
+false | true; echo "false|true -> \$? = $? (last stage won)"
+# PIPESTATUS remembers every stage, which is why real scripts use pipefail.
+false | true; echo "PIPESTATUS was: ${PIPESTATUS[*]}"
+
+# --- Process substitution: diff two commands' OUTPUT -----------------------
+# <(...) turns a command's output into a throwaway file descriptor, so diff can
+# compare two live outputs. Daily use: compare config across two hosts.
+echo "== diff the output of two commands =="
+printf 'alpha\nbravo\ncharlie\n' > hostA.txt
+printf 'alpha\nbravo\ndelta\n'   > hostB.txt
+# Here we diff sorted views of each file without creating temp sorted files:
+diff <(sort hostA.txt) <(sort hostB.txt) || echo "   (differences shown above)"
+
+# --- Here-string: feed one string as stdin ---------------------------------
+# <<< is lighter than a heredoc when you just need one line of input.
+echo "== here-string into wc =="
+wc -w <<< "count the words in this line"   # prints 6
+
+# --- Safe loop over find results (NUL-separated) ---------------------------
+# WARNING (no change here — just echoes): filenames can contain spaces/newlines.
+# -print0 + xargs -0 split on NUL instead of whitespace, so odd names survive.
+echo "== find -print0 | xargs -0 (safe filename handling) =="
+mkdir -p oddnames
+touch "oddnames/has a space.txt" "oddnames/normal.txt"
+find oddnames -type f -print0 | xargs -0 -n1 echo "would process:"
+
+# --- Keeping a job alive after logout (described, not run) -----------------
+# NOTE (no change): for real long jobs you would use one of these so the job
+# survives the terminal closing or SSH dropping:
+#   nohup ./long-job.sh &          # ignores hangup, logs to nohup.out
+#   setsid ./long-job.sh           # detaches into its own session
+#   tmux new -s work               # a reattachable session (the real answer)
+echo "Long-lived jobs: nohup / setsid / tmux — try tmux live in a VM."
+
 # The trap above cleans up $SCRATCH automatically when we exit here.
 echo "Done. Scratch dir will be removed on exit."

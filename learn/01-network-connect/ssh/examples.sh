@@ -73,3 +73,43 @@ _ssh_sesslog() {
   ssh "$@" 2>&1 | tee -a "${sesdir}/$(date +%Y%m%d).log"
 }
 echo "   defined _ssh_sesslog(); call it like:  _ssh_sesslog user@example.com"
+
+echo "=== 13) Debug a 'Permission denied (publickey)' and grep the useful lines ==="
+# -vvv prints the whole auth negotiation; grep pulls out only the key-offer lines.
+# This is the real way to see WHICH key was offered and whether it was accepted.
+#   ssh -vvv user@example.com 2>&1 | grep -iE 'offering|authentications that can continue|accepted'
+
+echo "=== 14) Run a remote command and process the output locally (awk from lesson 04) ==="
+# ssh prints the remote command's stdout to YOUR terminal, so pipes work normally.
+# Here: remote filesystem usage, busiest mount first.
+#   ssh user@example.com 'df -h' | awk 'NR>1 {print $5, $6}' | sort -rn
+
+echo "=== 15) Check many hosts for reachability from a host list (while-read loop) ==="
+# Build a tiny list, then test each with a short timeout so one dead host can't hang us.
+# BatchMode=yes => never prompt; ConnectTimeout => fail fast. 'true' is a no-op remote cmd.
+hostlist="$(mktemp)"
+trap 'rm -f "$hostlist"' EXIT
+printf 'user@example.com\nuser@192.168.1.50\n' > "$hostlist"
+echo "   built a demo host list at $hostlist; the loop below is left as a comment:"
+#   while read -r h; do
+#     if ssh -o BatchMode=yes -o ConnectTimeout=5 "$h" true 2>/dev/null; then
+#       echo "UP   $h"
+#     else
+#       echo "DOWN $h"
+#     fi
+#   done < "$hostlist"
+
+echo "=== 16) Copy a directory tree with a tar pipe over ssh (no scp needed) ==="
+# Streams a gzip'd tar straight down the tunnel and unpacks on the far side.
+#   tar czf - ./site | ssh user@example.com 'cd /srv && tar xzf -'
+
+echo "=== 17) rsync over ssh: copy only what changed (great for deploys) ==="
+# -a archive (perms/times), -z compress, --delete mirror, -e ssh pick the transport.
+#   rsync -az --delete -e 'ssh -o ConnectTimeout=5' ./site/ user@example.com:/srv/site/
+
+echo "=== 18) Connection multiplexing: make repeat logins instant (config snippet) ==="
+# Put this in ~/.ssh/config; the first ssh opens a master, later ones reuse it.
+#   Host *
+#       ControlMaster auto
+#       ControlPath ~/.ssh/cm-%r@%h:%p
+#       ControlPersist 10m

@@ -69,6 +69,43 @@ echo "=== 6) Inspect an encrypted file WITHOUT decrypting it ==="
 # --batch so it doesn't prompt. (On some systems the binary is gpg2.)
 gpg --batch --list-packets dump.sql.gpg | head -n 10
 
+echo "=== 7) COMBINE with tar: encrypt a whole DIRECTORY as a stream ==="
+# Real encrypted backups stream a tar straight through gpg so no plaintext
+# archive ever lands on disk. 'tar czf -' writes to stdout; gpg encrypts it;
+# we redirect to a .gpg file. Decrypt by reversing the pipe.
+mkdir -p backup_me/sub
+echo "config value"  > backup_me/app.conf
+echo "nested secret" > backup_me/sub/data.txt
+tar czf - backup_me | gpg -e -r "test@example.com" > backup.tar.gz.gpg
+echo "encrypted archive:"; ls -1 backup.tar.gz.gpg
+# Decrypt the stream back and extract into a fresh dir to prove the round-trip.
+mkdir -p restored && cd restored
+gpg --pinentry-mode loopback --passphrase '' -d ../backup.tar.gz.gpg | tar xzf -
+echo "restored tree:"; find backup_me -type f
+cd "$work"
+
+echo "=== 8) COMBINE: verify a download the RIGHT way (signature + checksum) ==="
+# Simulate a release: make a checksum list, SIGN the list, then verify the sig
+# and check the file against the signed list. This is the supply-chain drill.
+echo "release artifact v2 payload" > tool-v2.tar.gz
+if command -v sha256sum >/dev/null 2>&1; then
+  sha256sum tool-v2.tar.gz > SHA256SUMS                       # the list of hashes
+  gpg --batch --pinentry-mode loopback --passphrase '' \
+      --detach-sign --armor SHA256SUMS                        # sign the LIST
+  echo "1) verify the checksum file's signature (trust the list):"
+  gpg --verify SHA256SUMS.asc SHA256SUMS
+  echo "2) check the file against the trusted list:"
+  sha256sum -c SHA256SUMS
+else
+  echo "(sha256sum not installed — on Linux: sign SHA256SUMS, then 'sha256sum -c')"
+fi
+
+echo "=== 9) COMBINE with grep: which key is a file encrypted to? ==="
+# --list-packets dumps structure; grep (lesson 04) pulls just the recipient key
+# id line. On a real incident this tells you WHO can open an encrypted blob.
+gpg --list-packets dump.sql.gpg 2>/dev/null | grep -i keyid || \
+  echo "(no keyid line found)"
+
 # --- Patterns from the book you can adapt with REAL keys later ---------------
 # Look a person up on a public key server and import their key:
 #   gpg --keyserver hkp://keyserver.ubuntu.com --search-keys "name@example.com"

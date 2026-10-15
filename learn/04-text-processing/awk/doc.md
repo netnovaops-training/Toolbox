@@ -69,6 +69,72 @@ padding. If you build a tally with an array, you usually `print` it in an
 - **Expecting awk to edit files in place.** Classic awk prints to stdout; you
   redirect to a new file. (GNU awk has `-i inplace`, but don't rely on it.)
 
+## Job-relevant depth
+
+### BEGIN / END and real aggregation
+`awk` runs an optional `BEGIN { }` before any input and `END { }` after all of
+it. That's where reports live:
+```
+# Sum a column and print the total + average:
+awk '{ sum += $3 } END { print "total", sum, "avg", sum/NR }' data
+# Set up headers/separators once in BEGIN:
+awk 'BEGIN { FS=":"; OFS=" -> " } { print $1, $7 }' /etc/passwd
+```
+`FS` is the input separator (same as `-F`), `OFS` the output separator, `RS`/`ORS`
+the record separators. Setting them in `BEGIN` keeps the program clean.
+
+### Counting and tallying idioms (interview gold)
+- `a[$1]++` — count occurrences per key; print in `END` for a frequency table.
+- `!seen[$0]++` — print each line only the first time (de-dupe, order kept).
+- `sum[$1] += $2` — sum one column grouped by another (e.g. bytes per IP).
+- `END { for (k in a) print a[k], k }` — dump an associative array.
+
+### Conditions, math, and functions
+Full expressions work: `$3 > 500`, `$1 ~ /^10\./` (field matches regex),
+`$2 != "OK"`. Numeric fields auto-convert. Handy functions: `length($0)`,
+`substr($0,1,8)`, `split($3, parts, ":")`, `gsub(/x/, "y", $0)`,
+`printf "%-10s %5d\n", $1, $2` for aligned columns.
+
+### Multiple files and NR vs FNR
+`NR` counts across all input; `FNR` resets per file. The two-file trick
+`awk 'NR==FNR { a[$1]; next } ($1 in a)' keys.txt data.txt` keeps only the
+`data.txt` rows whose first field appeared in `keys.txt` — a poor-man's join.
+
+## Reading tricky output
+
+- A tally printed from `END { for (k in a) ... }` comes out in **no guaranteed
+  order** — pipe to `sort` to rank it.
+- If every line prints as one big field, your `FS` is wrong (CSV needs `-F,`).
+- `print a, b` puts `OFS` (a space by default) between them; `print a b` glues
+  them with nothing. That missing comma is a classic bug.
+
+## Common troubleshooting
+
+- **"My `$(date)` / shell variable didn't reach awk."** The shell expands it
+  before awk runs, and single quotes block it. Pass values in with `-v
+  name=value` instead: `awk -v today="$(date +%F)" '$1==today'`.
+- **"Numbers sorted as text."** awk compares numerically only in a numeric
+  context; force it with `+0` (`$3+0 > 500`) or sort downstream with `sort -n`.
+- **"CSV with quoted commas broke."** awk's `-F,` doesn't understand quoted
+  fields. For real CSV use a CSV-aware tool; awk is for clean columnar data.
+
+## Combine it
+
+awk is the *extract/compute* stage in the middle of a pipeline:
+```
+# Top 5 IPs in an access log (awk pulls the field, the rest ranks):
+awk '{print $1}' access.log | sort | uniq -c | sort -nr | head -5
+
+# Total bytes served per status code:
+awk '{ bytes[$9] += $10 } END { for (s in bytes) print s, bytes[s] }' access.log
+
+# Memory hogs from ps, sorted, nicely formatted:
+ps aux | awk 'NR>1 { print $4"%", $11 }' | sort -rn | head
+```
+Rule of thumb: `grep` narrows, `awk` picks the column or does the math,
+`sort | uniq -c | sort -nr` ranks. awk can do the tally *itself* with an array —
+use that when you also need a sum or an average, not just a count.
+
 ## sudo / root?
 
 `awk` only reads and prints — no system change. You'd only need root to *read*

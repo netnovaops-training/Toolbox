@@ -103,6 +103,44 @@ capitalised error name. That is almost always the line that matters.
   syscall, so it **slows the traced process down** — sometimes a lot. On a busy
   production daemon, trace briefly, narrow the syscall set, and detach.
 
+## A worked example: a process that hangs
+
+A cron job "just hangs" and never finishes. You find its PID with
+`pgrep -f thejob` and attach: `sudo strace -f -T -p <PID>`. The screen shows one
+line and then nothing:
+
+```
+read(7, 
+```
+
+No `=` result, strace is frozen on it → the process is **blocked inside that
+`read()`**, waiting for data on file descriptor 7 that never comes. Which fd is 7?
+`ls -l /proc/<PID>/fd/7` tells you — often a socket to a database or an upstream
+API that stopped responding. You have gone from "it hangs" to "it is blocked
+reading from <this exact connection>" in two commands, without the source code.
+That is the move that looks like magic in an interview; it is just reading the
+last syscall line.
+
+## Combine it with other tools
+
+A full trace is thousands of lines, so `strace` is almost always paired with the
+lesson-04 text tools. The key detail: strace writes to **stderr**, so you must
+redirect `2>&1` before piping:
+
+- Find every failed file lookup at a glance:
+  `strace -f -e trace=openat myapp 2>&1 | grep ENOENT` — each hit is a file the
+  app wanted and didn't find.
+- Count how many times each error happened:
+  `strace -f myapp 2>&1 | grep -oE 'E[A-Z]+' | sort | uniq -c | sort -rn` — a quick
+  tally of EACCES vs ENOENT vs ECONNREFUSED.
+- Read the `-c` summary and act on it: pipe the end-of-run table through `sort`/
+  `awk` to find the syscall eating the most time.
+- Narrow to the one file you care about:
+  `strace -f -e trace=openat myapp 2>&1 | grep '/etc/myapp'`.
+
+The pattern: `-e trace=...` cuts the noise at the source, then `2>&1 | grep`
+finds the one line that is the whole bug.
+
 ## Does it need root?
 
 To attach (`-p`) to a process **you own**, usually no. To attach to a process

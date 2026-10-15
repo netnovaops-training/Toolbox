@@ -124,6 +124,58 @@ shell with netcat when `ssh` exists.
   packets, which looks different from an active refusal. That difference is a
   real diagnostic clue.
 
+## More ways it earns its keep on the job
+
+- **Send a raw request and read the reply.** `nc` has no protocol, so you can
+  hand-type one. Piping a minimal HTTP request in proves the web server answers
+  even when `curl` is unavailable or you suspect `curl` itself:
+  ```bash
+  printf 'GET / HTTP/1.0\r\nHost: 192.168.1.50\r\n\r\n' | nc -w3 192.168.1.50 80
+  ```
+  The `\r\n` line endings are the real HTTP wire format — a good thing to *see*
+  once.
+- **Use it as a scriptable yes/no port check.** `nc -z` sets its **exit code**:
+  0 if the port is open, non-zero if not. That makes it a clean building block in
+  scripts: `if nc -z -w1 192.168.1.50 5432; then echo open; fi`. No parsing of
+  text needed.
+- **Know the pure-bash fallback.** When `nc` isn't installed, bash itself can
+  open a TCP socket: `(echo > /dev/tcp/192.168.1.50/22) 2>/dev/null && echo open`.
+  Worth recognising because minimal containers often ship without `nc`.
+- `-q <secs>` — after stdin closes, wait N seconds then quit (helps file
+  transfers finish cleanly instead of hanging).
+
+## How to read the output (deeper)
+
+Three outcomes, three different meanings — and telling them apart is the whole
+value of the tool on the job:
+
+- **"succeeded!" / exit 0** → the TCP handshake completed; a service is listening.
+- **"Connection refused" / fast non-zero exit** → the host is up and actively
+  said *no one is listening here* (sent a RST). The network path is fine; the
+  service is down or on another port.
+- **Hang until `-w` fires** → nothing answered at all. Almost always a firewall
+  **silently dropping** the packet. "Refused" vs "timed out" is the difference
+  between "service is down" and "a firewall is in the way" — don't blur them.
+
+## Combine it (loops and pipelines from earlier lessons)
+
+```bash
+# Check a list of ports and summarise open vs closed (loop + arithmetic):
+host=127.0.0.1
+for p in 22 80 443 5432 8080; do
+  if nc -z -w1 "$host" "$p" 2>/dev/null; then echo "$p open"; else echo "$p closed"; fi
+done | sort
+
+# Feed a host:port list from a file and flag the reachable ones (while-read + awk):
+# file lines look like:  192.168.1.50 5432
+while read -r h p; do
+  nc -z -w1 "$h" "$p" 2>/dev/null && echo "UP   $h:$p" || echo "DOWN $h:$p"
+done < targets.txt | awk '{print}' | sort
+
+# Grab a banner and pull just the version line out of it (grep, lesson 04):
+nc -w2 192.168.1.50 22 </dev/null | grep -i ssh
+```
+
 ## Common mistakes
 
 - **No timeout.** Without `-w`, a probe to a filtered port hangs. Always add

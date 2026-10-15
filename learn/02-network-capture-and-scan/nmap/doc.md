@@ -116,6 +116,52 @@ nmap -F scanme.nmap.org
 > If you go into security work, you'll learn NSE properly, in a lab, against
 > targets you're authorised to test — not from a copy-paste one-liner.
 
+## More options that matter on the job
+
+- `-iL hosts.txt` — read targets from a **file** (one host/CIDR per line). The
+  standard way to scan an inventory you maintain in text. `--exclude 192.168.1.1`
+  keeps the gateway (or anything fragile) out of the sweep.
+- `--top-ports 20` — scan the N most common ports instead of a fixed list; a
+  good "quick but meaningful" default on your own hosts.
+- `-Pn` — **skip host discovery** and scan anyway. Needed when a host is up but
+  drops pings (many firewalled boxes), otherwise nmap decides it's down and never
+  scans it. Flip side: on a dead host it wastes time, so use deliberately.
+- `--reason` — add a column explaining *why* nmap called a port open/closed/
+  filtered (e.g. `syn-ack`, `reset`, `no-response`). Turns a verdict into
+  evidence you can defend.
+- `--open` — hide the noise; show only open ports.
+- `-sC` / `--script safe` — run the **safe** category of NSE scripts (banner
+  grabbing, read-only checks) on your own hosts. Stay in the `safe`/`default`
+  categories for learning; intrusive categories are for authorised security work.
+- `--script-help nmap-scripts` and `ndiff` (compare two scans) are worth knowing:
+  `ndiff` shows what changed between a baseline scan and today's — the basis of
+  simple "did a new port open on our server?" monitoring.
+
+## The greppable-output workflow (the classic combine)
+
+The most job-relevant nmap habit is saving machine-readable output and mining it
+with lesson-04 tools, so a scan becomes a list you can act on:
+
+```bash
+# -oG - sends greppable output to stdout; pull out host + open ports with awk:
+sudo nmap -F --open -oG - 192.168.1.0/24 \
+  | awk '/Ports:/ {print $2, $0}' | sed 's/Ignored.*//'
+
+# Just the IPs that have port 22 open, ready to feed into an ssh loop:
+sudo nmap -p22 --open -oG - 192.168.1.0/24 \
+  | grep '22/open' | awk '{print $2}'
+
+# Save a baseline, scan again tomorrow, and diff to spot new/closed ports:
+sudo nmap -F -oX /tmp/baseline.xml 192.168.1.50
+#   ... later ...
+sudo nmap -F -oX /tmp/today.xml 192.168.1.50
+ndiff /tmp/baseline.xml /tmp/today.xml
+```
+
+That `nmap -oG - | grep open | awk '{print $2}'` → feed to an `ssh`/`nc` loop
+pattern (lessons 01-02) is exactly how small inventories get built and checked in
+the real world — always, of course, against hosts you own.
+
 ## Common mistakes
 
 - **Scanning something you don't own.** The number-one mistake, and the one with

@@ -29,10 +29,6 @@ echo "=== 3) Which processes use anything under a directory/filesystem ==="
 # This is the command for "can't unmount: target is busy".
 fuser -mv "$work" || true
 
-# Stop our background holder cleanly now that the lookups are done.
-kill "$holder" 2>/dev/null || true
-wait "$holder" 2>/dev/null || true
-
 echo "=== 4) Which process is listening on a port? ==="
 # Syntax is port/protocol. Here we check a UDP and a TCP port.
 # On your box these may be empty (nothing listening) — that's fine.
@@ -42,6 +38,35 @@ fuser -v 443/tcp || true     # classic HTTPS port
 echo "=== 5) List the signal names fuser can send ==="
 # Useful before using -k so you know your options (HUP, TERM, KILL, ...).
 fuser --list-signals || true
+
+echo "=== 6) COMBINE with ps (lesson 04): turn the PID into full details ==="
+# fuser prints PIDs on stdout and its labels on stderr, so 2>/dev/null leaves
+# only the numbers — perfect to hand to ps. This answers 'who holds my file,
+# since when, and what's the full command line?' in one go.
+holder_pids="$(fuser "$work/demo.log" 2>/dev/null || true)"
+if [ -n "${holder_pids// }" ]; then
+  ps -o pid,user,etime,cmd -p $holder_pids || true
+else
+  echo "(no holder found — nothing to look up)"
+fi
+
+echo "=== 7) COMBINE with awk (lesson 04): extract just the PID column ==="
+# Parse the verbose table and pull field 2 (the PID). This is how you'd feed
+# fuser's result into a script step — e.g. to look up or (carefully) signal it.
+fuser -v "$work/demo.log" 2>&1 | awk 'NR>1 && $2 ~ /^[0-9]+$/ { print "PID holding the file:", $2 }' || true
+
+echo "=== 8) COMBINE: fuser finds the PID, lsof explains it (if lsof present) ==="
+# fuser answers 'who holds it?' fast; lsof answers 'what exactly are they doing?'.
+# Knowing both tools and when to reach for each is the job-level skill.
+if command -v lsof >/dev/null 2>&1; then
+  lsof "$work/demo.log" || true
+else
+  echo "(lsof not installed — on a real box: lsof <file> or lsof -i :<port>)"
+fi
+
+# Stop our background holder cleanly now that all the lookups are done.
+kill "$holder" 2>/dev/null || true
+wait "$holder" 2>/dev/null || true
 
 # --- KILL examples from the book (LEFT COMMENTED ON PURPOSE) -----------------
 # WARNING: every command below sends a signal that stops a process and can

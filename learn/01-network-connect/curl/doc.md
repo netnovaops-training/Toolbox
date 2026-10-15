@@ -94,6 +94,60 @@ curl -O -C - https://example.com/big.iso
 curl -v https://example.com
 ```
 
+## More options that earn their keep on the job
+
+- `-w '<format>'` — **write-out**: print your own variables after the transfer.
+  This is the single most useful "senior" curl trick, because it breaks a slow
+  request into its phases so you know *which layer* is slow:
+  `-w 'dns=%{time_namelookup} connect=%{time_connect} tls=%{time_appconnect} ttfb=%{time_starttransfer} total=%{time_total}\n'`.
+  `%{http_code}` and `%{size_download}` are also common.
+- `-f` / `--fail` — in a script, make curl **exit non-zero on an HTTP 4xx/5xx**
+  instead of happily printing the error page. Lets `if curl -f ...; then` work.
+- `--max-time 10` and `--connect-timeout 5` — cap total and connect time so a
+  hung endpoint can't wedge your script.
+- `--retry 3 --retry-delay 2` — retry transient failures (good for flaky
+  networks and rolling deploys).
+- `--resolve name:port:ADDRESS` — force a hostname to resolve to an address you
+  choose, *without touching DNS or `/etc/hosts`*. This is how you test one
+  specific backend behind a load balancer, or a new server before you cut DNS
+  over: `curl --resolve example.com:443:192.168.1.50 https://example.com`.
+- `-u user:pass` — HTTP basic auth. `-b`/`-c` — send/save cookies (`-c jar.txt`
+  saves, `-b jar.txt` replays). `-G` — turn `-d` fields into a GET query string.
+- `-T file` — upload a file (PUT). `--data-urlencode` — send form data with the
+  encoding handled for you.
+
+## How to read the output (deeper)
+
+- **Exit codes matter in scripts.** `6` = couldn't resolve host (DNS), `7` =
+  couldn't connect (TCP/firewall), `28` = timeout, `35`/`60` = TLS problems,
+  `22` = HTTP error when you used `-f`. Check `echo $?` right after a failure —
+  the number tells you which layer broke before you read a single header.
+- **The `-w` timing split is a decision tree.** Big `time_namelookup` → DNS is
+  slow (go to `dig`). Big gap between `time_connect` and `time_appconnect` → TLS
+  handshake is the cost. Big `time_starttransfer` with everything else fast → the
+  *server* is slow to produce the first byte (application, not network).
+
+## Combine it (pipe curl into earlier-lesson tools)
+
+```bash
+# Pull one field out of a JSON API without jq (grep + sed, lesson 04):
+curl -s https://api.example.com/status | grep -o '"version":"[^"]*"' | sed 's/.*:"//; s/"//'
+
+# Just the status code, for use in a condition:
+code=$(curl -s -o /dev/null -w '%{http_code}' https://example.com); echo "$code"
+
+# Measure latency over N requests and average it with awk (lesson 04):
+for i in $(seq 1 10); do
+  curl -s -o /dev/null -w '%{time_total}\n' https://example.com
+done | awk '{sum+=$1; n++} END {printf "avg %.3fs over %d reqs\n", sum/n, n}'
+
+# Save response headers to a scratch file, then grep for a specific one:
+curl -sI https://example.com -o "$(mktemp)".hdr && grep -i '^location:' "$_"
+
+# Pull every link out of a page (grep -o) — rough, but a real quick-and-dirty move:
+curl -s https://example.com | grep -oE 'https?://[^"<> ]+' | sort -u
+```
+
 ## Common mistakes
 
 - **Forgetting `-L`** and thinking a site is "broken" when it is just

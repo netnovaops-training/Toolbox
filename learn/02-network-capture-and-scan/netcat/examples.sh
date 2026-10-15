@@ -54,3 +54,38 @@ echo "=== 7) Grab a service banner (what a service announces on connect) ==="
 # Connect briefly and see the greeting. -w1 so it won't hang if nothing speaks first.
 #   nc -v -w1 192.168.1.50 22     # an SSH daemon prints its version string
 echo "   (point at your own host — left as a comment)"
+
+echo "=== 8) Scriptable port check via EXIT CODE (no text parsing) ==="
+# nc -z sets $? : 0 = open, non-zero = closed/filtered. Clean for 'if' tests.
+if nc -z -w1 127.0.0.1 22 2>/dev/null; then
+  echo "   127.0.0.1:22 is OPEN"
+else
+  echo "   127.0.0.1:22 is closed/filtered (fine on most desktops)"
+fi
+
+echo "=== 9) Check a LIST of ports and summarise open vs closed (loop + sort) ==="
+# Loop a handful of ports on loopback; print each state, then sort for readability.
+host=127.0.0.1
+for p in 22 80 443 5432 8080; do
+  if nc -z -w1 "$host" "$p" 2>/dev/null; then echo "$p open"; else echo "$p closed"; fi
+done | sort -n
+
+echo "=== 10) Target list from a file -> reachability report (while-read, YOUR hosts) ==="
+# WARNING: only list hosts you OWN. Build a demo list in a scratch dir first.
+work="$(mktemp -d)"
+trap 'rm -rf "$work"' EXIT
+printf '127.0.0.1 22\n127.0.0.1 9999\n' > "$work/targets.txt"
+while read -r h p; do
+  nc -z -w1 "$h" "$p" 2>/dev/null && echo "UP   $h:$p" || echo "DOWN $h:$p"
+done < "$work/targets.txt"
+
+echo "=== 11) Send a raw HTTP request by hand and grep the status line ==="
+# No curl needed: printf the wire-format request, pipe into nc, grep the first line.
+# \r\n is the real HTTP line ending. Points at a placeholder host YOU own.
+#   printf 'GET / HTTP/1.0\r\nHost: 192.168.1.50\r\n\r\n' | nc -w3 192.168.1.50 80 | grep -i '^HTTP/'
+echo "   (raw HTTP demo against your own host — left as a comment)"
+
+echo "=== 12) Pure-bash fallback when nc isn't installed (recognise this) ==="
+# Minimal containers often lack nc; bash can open /dev/tcp itself.
+#   (echo > /dev/tcp/127.0.0.1/22) 2>/dev/null && echo "open" || echo "closed"
+echo "   (bash /dev/tcp trick — left as a comment)"

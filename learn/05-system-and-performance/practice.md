@@ -154,3 +154,76 @@ the service has its own reload/restart command you should prefer.
 the service's own reload/stop, (3) if you must signal, `fuser -k -i -TERM`
 first, and only escalate to the default KILL if TERM fails — and you can explain
 why KILL-first risks data loss.
+
+---
+
+## 11. Turn vmstat into an alert (harder — combines lesson 04)
+
+Run a live `vmstat` and pipe it through `awk` so it prints a line *only* when CPU
+idle drops below 50%. Make the box busy in another terminal and watch it fire.
+
+**Hint:** Skip the header and since-boot line with `NR>2`. The idle column (`id`)
+is field 15 in the default layout; force numeric compare with `$15+0 < 50`.
+
+**Check yourself:** The pipeline stays quiet when the box is idle and prints a
+line the moment you load it — and you can explain why `NR>2` is needed (it drops
+the header *and* the misleading first line).
+
+---
+
+## 12. Capture evidence, then filter it (harder — combines lesson 04)
+
+Save a 15-sample `vmstat 1` trace to a file, then use `grep`/`awk` to pull out
+only the samples where I/O wait (`wa`) was high. Pretend you're attaching the
+result to a ticket.
+
+**Hint:** Redirect the run to a file, then `awk 'NR>2 && $16+0 > 20'`. Field 16
+is `wa` in the default layout.
+
+**Check yourself:** You can produce a short list of just the bad samples (or show
+the list is empty because the box was healthy), and explain why that's more
+convincing on a ticket than "it felt slow."
+
+---
+
+## 13. Find the failing syscall and grep it out (harder — combines lesson 04)
+
+Trace a program that fails to open a file, but instead of reading the whole
+trace, pipe it so only the failing line appears. Remember where strace writes.
+
+**Hint:** strace prints to **stderr**, so you must `2>&1` before `| grep`. Filter
+with `-e trace=openat` and `grep ENOENT`.
+
+**Check yourself:** One line comes back — the `openat(...) = -1 ENOENT` — and you
+can explain why forgetting `2>&1` makes grep see nothing.
+
+---
+
+## 14. From port to process to command (harder — combines tools)
+
+Start a throwaway listener on a port in your sandbox, then build a one-liner that
+goes from the port all the way to the full command line of the process holding
+it, using `fuser` and `ps` together.
+
+**Hint:** `fuser <port>/tcp 2>/dev/null` prints bare PIDs on stdout; feed those
+to `ps -fp`. The `2>/dev/null` drops fuser's labels so only numbers reach `ps`.
+
+**Check yourself:** You get the user, start time, and full command of your
+listener — and you can explain which tool found the PID and which explained it.
+
+---
+
+## 15. Diagnose a hung process end to end (hardest — combines tools)
+
+In your sandbox, start something that blocks forever (e.g. a `read` from a FIFO
+nothing writes to, or `sleep infinity`), then: find its PID, attach `strace` to
+see the syscall it's stuck in, and (for a blocking read) identify the file
+descriptor it's waiting on.
+
+**Hint:** `pgrep`/`ps` for the PID, `sudo strace -p <PID>` to see the frozen
+syscall (a line with no `=` result), and `ls -l /proc/<PID>/fd/<n>` to see what
+fd `<n>` actually points to. Ctrl-C detaches strace without killing the process.
+
+**Check yourself:** You can name the exact syscall it's blocked in and what it's
+waiting on, and you detached cleanly — the process is still running afterward.
+This is the "it just hangs" ticket answered with evidence, not a guess.

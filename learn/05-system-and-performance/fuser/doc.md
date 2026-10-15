@@ -98,6 +98,36 @@ PID 990 (`nginx`) owns port 443. That's why your new server can't bind it.
   see*. To see processes owned by other users (most system daemons), you need
   root.
 
+## A worked example: "address already in use"
+
+You deploy a new version of a service and it won't start: `bind: address already
+in use` on port 8080. Something already owns that port. You run
+`sudo fuser -v 8080/tcp` and get a PID and a command name — say an old copy of the
+app that didn't shut down. Now you have a choice, and the *order* is the skill:
+first confirm what it is (`fuser -v`, or `ps -fp <PID>`), then prefer the service's
+own `systemctl restart`/`stop`, and only as a last resort signal it — politely,
+with `sudo fuser -k -i -TERM 8080/tcp`, escalating to the default KILL only if TERM
+is ignored. Blindly `fuser -k` first is how you turn a small deploy hiccup into an
+outage you caused.
+
+## Combine it with other tools
+
+`fuser` prints bare PIDs by default, which makes it easy to feed into other
+commands from earlier lessons:
+
+- Turn the PIDs into full process details:
+  `ps -fp $(fuser /var/log/app.log 2>/dev/null)` — who, since when, full command
+  line. (`fuser` prints PIDs on stdout and its labels on stderr, so the `2>/dev/null`
+  keeps only the numbers for `ps`.)
+- Extract just the PID column from the verbose table with `awk` (lesson 04):
+  `sudo fuser -v 443/tcp 2>&1 | awk 'NR>1 {print $2}'`.
+- Cross-check with `lsof` when you want *detail* instead of just PIDs:
+  `sudo lsof -i :443` names the user, PID, and connection state. `fuser` answers
+  "who holds it?" fast; `lsof` answers "and what exactly are they doing with it?".
+
+The pairing to remember: `fuser` finds the PID, `ps`/`lsof` explain it, and only
+then — if you must — do you signal it.
+
 ## Does it need root?
 
 For files and ports you own, no. To see processes owned by **other users**

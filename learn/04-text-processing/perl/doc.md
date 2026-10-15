@@ -61,6 +61,69 @@ check the file. A count one-liner prints its summary from an `END { }` block.
 - **Shell quoting.** Keep the program in single quotes so the shell doesn't
   expand `$_`, `$.`, or `$1`.
 
+## Job-relevant depth
+
+### Why perl where sed struggles
+- **Portable `-i`.** `perl -i.orig -pe '...'` behaves the same on Linux, BSD,
+  and macOS — no `sed -i ''` surprise. For scripts that must run anywhere, this
+  alone is a reason to use perl.
+- **A richer regex engine.** Lookahead `(?=...)`, lookbehind `(?<=...)`,
+  non-greedy `.*?`, named captures `(?<name>...)`, `\d \w \s`, and modifiers
+  like `/x` (whitespace-insensitive) all work out of the box.
+- **Multi-line / whole-file mode.** `perl -0777 -pe 's/.../.../gs'` slurps the
+  *entire file* into `$_` so a regex can span lines — something line-based sed
+  can't do without the awkward `:a;N` loop.
+
+### Capture groups and `-a` autosplit
+```
+perl -pe 's/(\w+)=(\w+)/$2=$1/' file       # swap key and value using $1 $2
+perl -lane 'print $F[0], " ", $F[-1]' file # -a splits into @F; -F',' for CSV
+perl -ne 'print "$1\n" if /status=(\d+)/' log   # extract just the capture
+```
+`-a` gives you `@F` (like awk's fields); `-F'pattern'` sets the split. `$F[0]`
+is the first field, `$F[-1]` the last. This turns perl into an awk-style tool.
+
+### Useful flags together
+- `-l` chomps input newlines and re-adds them on print — stops double/missing
+  newlines. `-n`/`-p` loop; `-e` is the code; `-M` loads a module.
+- `-00` paragraph mode (records split on blank lines); `-0777` whole-file slurp.
+
+## Reading tricky output
+
+- With `-n` you see only what you `print`; with `-p` the line auto-prints after
+  your code runs. Doubled output usually means you printed *and* used `-p`.
+- `-i` prints nothing — the file changed on disk; `cat` it to confirm.
+- A regex that silently matches nothing often means an unescaped metacharacter
+  or a `\b` boundary that didn't fall where you expected.
+
+## Common troubleshooting
+
+- **"Can't do inplace edit: ... "** on BSD/macOS — you need a backup suffix.
+  `perl -i.bak -pe` is the portable, always-safe form.
+- **Shell ate my `$1`/`$_`.** Keep the program in **single** quotes so the shell
+  leaves perl's variables alone; use `-e` once per code chunk.
+- **"My multi-line regex didn't match across lines."** Default mode is
+  line-by-line; add `-0777` to slurp the file and `/s` so `.` matches newlines.
+- **Greedy match grabbed too much.** Use the non-greedy `.*?`.
+
+## Combine it
+
+perl shines as the *transform*, but it pipes like everything else:
+```
+# Extract a captured field and rank it:
+perl -ne 'print "$1\n" if /"(?:GET|POST) (\S+)"/' access.log \
+  | sort | uniq -c | sort -nr | head        # top requested paths
+
+# Preview a multi-file replace that find selected, THEN apply with a backup:
+find /etc/myapp -name '*.conf' -print0 | xargs -0 perl -ne 'print "$ARGV: $_" if /8080/'   # preview
+# find /etc/myapp -name '*.conf' -print0 | xargs -0 perl -i.orig -pe 's/8080/9090/g'        # apply
+
+# Whole-file edit: delete a <!-- ... --> block that spans lines:
+perl -0777 -pe 's/<!--.*?-->//gs' page.html > page.clean.html
+```
+The safe pattern mirrors sed: run the **preview** (no `-i`) across all the files
+`find` turned up, read it, and only then re-run with `-i.orig` to apply.
+
 ## sudo / root?
 
 Previewing needs no root. In-place edits (`-i`) to files you don't own — e.g.

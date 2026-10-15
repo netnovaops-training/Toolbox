@@ -161,3 +161,79 @@ recipient key IDs.
 **Check yourself:** You can read a key ID out of the packet list, and you can
 explain that "No secret key" means the file was encrypted to a key whose private
 half you don't hold — so you simply cannot read it.
+
+---
+
+## 11. Sign a CSR with your own CA and verify the chain (harder — combines skills)
+
+Make a throwaway root CA (a self-signed cert + key), use it to sign the CSR from
+exercise 4, and then prove the signed leaf chains to your CA.
+
+**Hint:** `openssl req -x509 ...` makes the CA; `openssl x509 -req -CA ca.crt
+-CAkey ca.key -CAcreateserial` signs the CSR; `openssl verify -CAfile ca.crt
+leaf.crt` checks the chain.
+
+**Check yourself:** `openssl verify` prints `OK`, the leaf's **Issuer** is now the
+CA (not itself, unlike the self-signed cert in exercise 5), and you can explain
+what `verify` actually proved.
+
+---
+
+## 12. Days until a cert expires (harder — combines with `date`)
+
+Write a one-liner that prints how many days are left before a certificate
+expires. Use the signed leaf from exercise 11, or any real site's cert.
+
+**Hint:** Read `notAfter` with `openssl x509 -noout -enddate`, strip the `=` with
+`cut`, convert it and `now` to epoch seconds with `date -d ... +%s`, subtract, and
+divide by 86400.
+
+**Check yourself:** You get a plausible day count, and you can explain how you'd
+turn this into a monitoring check that alerts, say, 14 days before expiry.
+
+---
+
+## 13. Diagnose a broken chain against a live site (harder — combines tools)
+
+Pick a public HTTPS site. Count how many certificates it sends, read its
+`Verify return code`, and its expiry — all from `s_client` piped into other
+tools. Say which of the three classic failures (expired / wrong name / missing
+intermediate) you'd be looking at for each symptom.
+
+**Hint:** `s_client -showcerts` and `grep -c 'BEGIN CERTIFICATE'` for the count;
+the `Verify return code:` line at the bottom of plain `s_client`; pipe into
+`openssl x509 -noout -dates -subject` for the rest. Remember `echo |` and
+`-servername`.
+
+**Check yourself:** You can state the cert count, whether the chain verified
+(`0 (ok)`), and the expiry — and match each possible failure to its command.
+
+---
+
+## 14. Encrypt a whole directory as a backup (harder — combines with `tar`)
+
+Encrypt an entire directory to your gpg test key *without* writing a plaintext
+archive to disk, then restore it and confirm the files came back intact.
+
+**Hint:** `tar czf - dir | gpg -e -r <you> > dir.tar.gz.gpg` to make it; reverse
+with `gpg -d dir.tar.gz.gpg | tar xzf -`. Compare before/after with `find` or
+`diff -r`.
+
+**Check yourself:** The restored tree matches the original, and you can explain
+why streaming through the pipe (no intermediate `.tar`) is safer for a backup
+that contains secrets.
+
+---
+
+## 15. Verify a download end to end (hardest — combines gpg + hashing)
+
+Simulate a signed release: create a file, write a `SHA256SUMS` list of its hash,
+sign the *list* with your test key, then verify the signature and check the file
+against the list. Then explain the trust subtlety in one or two sentences.
+
+**Hint:** `sha256sum file > SHA256SUMS`, `gpg --detach-sign --armor SHA256SUMS`,
+`gpg --verify SHA256SUMS.asc SHA256SUMS`, then `sha256sum -c SHA256SUMS`.
+
+**Check yourself:** Both checks pass, and you can explain that "Good signature"
+only matters if you got the signer's public key from a source independent of the
+file — otherwise an attacker who swapped the file could swap the key too.

@@ -90,6 +90,81 @@ suspended, not dead.
 - `kill -9 $$` kills your own shell — handy to drop a session fast, but you lose
   the session immediately.
 
+## Job-relevant depth
+
+### tee — see it AND save it
+A daily need: watch output live *and* keep a copy. `>` can't do that; `tee` can.
+```
+command | tee run.log            # screen + file (overwrite)
+command |& tee run.log           # include stderr too (bash 4+; = 2>&1 | tee)
+sudo some-install | tee -a install.log   # -a appends instead of overwriting
+```
+`tee` sits in the middle of a pipe, so the output keeps flowing to the next
+stage while a copy lands on disk.
+
+### Here-strings and process substitution
+- `cmd <<< "text"` — feed a single string as stdin (lighter than a heredoc).
+- `diff <(cmd1) <(cmd2)` — compare the *output* of two commands as if each were
+  a file. `<(...)` is a real on-the-fly file descriptor. This is a sysadmin
+  favourite: `diff <(ssh host1 'sort /etc/passwd') <(ssh host2 'sort /etc/passwd')`.
+
+### Keeping jobs alive the modern way
+`disown` works, but on the job you usually reach for:
+- `nohup long-job &` — ignores hangup, writes to `nohup.out`.
+- `setsid long-job` — fully detaches into its own session.
+- `tmux` / `screen` — the real answer: a session you can detach from and
+  reattach to after you log out, or after SSH drops. Learn `tmux` early.
+
+### Exit codes — the thing scripts live and die by
+Every command sets `$?` (0 = success, non-zero = failure). This is how shell
+logic works. In a pipeline, `$?` is only the *last* command's code unless you
+set `pipefail`. `${PIPESTATUS[@]}` holds every stage's code. This is exactly why
+`set -euo pipefail` (see below) matters in real scripts.
+
+### set -euo pipefail — the safety header for real scripts
+Interactive poking skips it, but a script you commit should start with it:
+- `-e` stop at the first failing command (don't plough on after an error).
+- `-u` treat an unset variable as an error (catches typos in `$VARNAEM`).
+- `-o pipefail` a pipeline fails if *any* stage fails, not just the last.
+The example scripts in these lessons comment it out on purpose so every demo
+line runs even when one "fails" to make a point — that's a teaching choice, not
+how you'd write production scripts.
+
+## Reading tricky output
+
+- `[1]+ Stopped   vim` — job 1 is suspended (Ctrl-Z), not dead; `fg` resumes it.
+- `[2] 48213` right after `cmd &` — job number 2, PID 48213.
+- `bash: cmd: command not found` is stderr, so `cmd 2>/dev/null` hides it.
+- A command that prints *nothing* and returns you to the prompt usually
+  succeeded — check `echo $?` to be sure (`0`).
+
+## Common troubleshooting
+
+- **"My redirect made an empty file."** `cmd > file` creates/truncates `file`
+  *before* `cmd` runs. If `cmd` then errors, you're left with an empty file and
+  the real error on screen. Preview the command first, or capture with `tee`.
+- **"The log is empty until the program ends."** Output is buffered when it's
+  going to a pipe/file instead of a terminal. Use `stdbuf -oL cmd` or the
+  program's own line-buffer/flush option to see logs live.
+- **"It died when I closed the terminal."** Backgrounding with `&` isn't enough;
+  use `nohup`, `disown`, or `tmux`.
+
+## Combine it
+
+The shell is the glue that joins every other tool in these lessons:
+```
+# Save full output to a file but still watch errors scroll by:
+./deploy.sh > deploy.log 2> >(tee deploy.err >&2)
+
+# Build a pipeline one stage at a time, checking as you go:
+grep ERROR app.log | awk '{print $NF}' | sort | uniq -c | sort -nr | head
+
+# Loop find's results safely (NUL-separated, survives spaces in names):
+find . -name '*.conf' -print0 | xargs -0 -n1 echo "would process:"
+```
+`-print0` + `xargs -0` is the safe pattern whenever filenames might contain
+spaces or newlines — plain word-splitting breaks on those.
+
 ## sudo / root?
 
 None of the basics here need root. Redirecting *into* a system path like

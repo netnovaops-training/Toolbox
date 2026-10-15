@@ -61,3 +61,39 @@ subfolder when you get stuck.
     these?
     - Hint: group two `-perm` tests with `\( ... -o ... \)`; the setuid bit is
       `-4000`, setgid is `-2000`.
+
+## Employment-grade
+
+11. **Disk-hog report (combines find + sort + awk).** Your scratch tree has a
+    few files of different sizes. Produce a top-5 list of the biggest files,
+    showing each size in MB next to its path, biggest first.
+    - Hint: `find ... -printf '%s %p\n'` (or `-exec stat` on BSD/macOS), then
+      `sort -nr`, `head`, and `awk` to divide bytes by 1048576.
+
+12. **Safe action over ugly filenames (combines find + xargs).** Create two
+    files, one with a space in its name. Write a single pipeline that prints a
+    line for *each* file without the space breaking the arguments.
+    - Hint: `-print0` on one end, `xargs -0` on the other. Try it first *without*
+      the null trick and watch it mis-split.
+
+13. **What changed since the marker.** Touch a reference file, wait a second,
+    edit one existing file, then list everything newer than the marker — minus
+    the marker itself. This is the "what changed since the last good deploy?"
+    move.
+    - Hint: `-newer FILE`, and `! -name marker` to exclude the reference.
+
+14. **Phantom disk usage (combines lsof + the permissions idea).** `df` reports
+    a disk is full but `du` can't find the space. Explain, in a sentence, what's
+    usually happening, and which `lsof` flag finds the held, deleted file.
+    - Hint: a process still holds a file you already `rm`'d; `lsof +L1`.
+
+15. **Rank open files per process (combines lsof + awk + sort + uniq).** Produce
+    a list of which processes have the most files open, most first. Why would a
+    number that only ever *grows* worry you?
+    - Hint: `lsof -nP`, pull command+PID with `awk`, then
+      `sort | uniq -c | sort -nr`. Think "file-descriptor leak".
+
+16. **Count files per extension (combines find + sed + sort + uniq).** Across
+    your tree, tally how many files share each extension, ranked.
+    - Hint: `find -type f`, strip to the extension with `sed 's/.*\.//'`, then
+      `sort | uniq -c | sort -nr`.

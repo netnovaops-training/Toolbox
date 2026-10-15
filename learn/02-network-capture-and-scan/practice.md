@@ -135,3 +135,75 @@ certain header."
 packets), d→`ngrep` (content match). Several could overlap — justify your pick.
 **Check yourself:** your reasons mention what each tool is *built* for, not just
 that it "works."
+
+---
+
+### 11. Refused vs dropped, read from the packets (harder)
+Use netcat to probe a closed port and a (firewalled) dropped port on a host you
+own, while `tcpdump` watches. Match each netcat result to what you see on the
+wire.
+
+*Hint:* a closed port answers your SYN with a `[R]` (reset) → netcat says
+"refused"; a dropped port produces *no* reply → netcat hangs until `-w` fires.
+**Check yourself:** you can point at the RST for the refused port and the silence
+for the dropped one, and tie each to the netcat behaviour.
+
+---
+
+### 12. Port report from a list (combines lesson 04)
+Make a file of `host port` lines (your own hosts only). Write a loop that checks
+each with `nc -z -w1` and prints `UP`/`DOWN`, then pipe the result through `grep`
+to show only the DOWN ones.
+
+*Hint:* `while read -r h p; do nc -z -w1 "$h" "$p" && ... done < targets.txt`.
+`nc -z` sets the exit code, so you can branch on it with no text parsing.
+**Check yourself:** the DOWN-only list is correct and you never parsed nc's text
+output to get it.
+
+---
+
+### 13. Top talkers from a saved capture (combines lessons 03-04, harder)
+Capture ~300 packets of your own loopback traffic to a `.pcap`
+(`sudo tcpdump -n -i lo -c 300 -w /tmp/cap.pcap`), generate traffic with `curl`,
+then read the file back and rank source addresses with `awk`/`sort`/`uniq`.
+
+*Hint:* `tcpdump -n -r /tmp/cap.pcap | awk '{print $3}' | cut -d. -f1-4 | sort |
+uniq -c | sort -rn | head`. Capture first, analyse the file second.
+**Check yourself:** you produce a counted, sorted list of the busiest addresses
+from a file you captured yourself.
+
+---
+
+### 14. Count the TCP flags in a capture (medium-hard)
+Using the same saved `.pcap`, count how many packets carried each TCP flag set
+(`[S]`, `[S.]`, `[.]`, `[F.]`, `[R]`). Say what a large count of SYNs with few
+SYN-ACKs would suggest.
+
+*Hint:* `grep -oE 'Flags \[[^]]*\]'` then `sort | uniq -c | sort -rn`. Lots of
+`[S]` and almost no `[S.]` = connections attempted but not completing.
+**Check yourself:** your counts add up roughly to the packet total and you can
+read a "half-open" pattern from them.
+
+---
+
+### 15. Scan to a host list, then act on it (combines lessons 01-02, hardest)
+On your own lab subnet, run `nmap` with greppable output to produce the list of
+IPs that have port 22 open, save it to a file, and describe (do not run blindly)
+how you'd loop that file with `ssh -o BatchMode=yes` to check each box.
+
+*Hint:* `sudo nmap -p22 --open -oG - <your/24> | grep '22/open' | awk '{print
+$2}' > hosts.txt`, then a `while read` loop with a short `ConnectTimeout`.
+**Check yourself:** you have a clean `hosts.txt` of SSH-reachable IPs and a loop
+plan that won't hang on a dead host — and you confirmed the range is yours first.
+
+---
+
+### 16. Prove a header is really on the wire (combines lesson 04, harder)
+With your own plaintext HTTP server running, use `ngrep` to match a specific
+header (say `User-Agent:`) and pipe the matches through `grep -o`/`sort`/`uniq
+-c` to tally the distinct values you sent with a few different `curl -A` calls.
+
+*Hint:* `sudo ngrep -l -q -W single -d lo 'User-Agent:' port 8080 | grep -oiE
+'User-Agent: .*' | sort | uniq -c`. Drive it with `curl -A name ...`.
+**Check yourself:** the tally shows each `-A` value you used, proving the header
+left your machine — and the same match on port 443 finds nothing in the body.

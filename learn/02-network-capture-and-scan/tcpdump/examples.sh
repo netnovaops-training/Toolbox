@@ -62,3 +62,31 @@ echo "=== 8) Top talkers: count packets by source address (adapted) ==="
 # -t drop timestamps, -c 200 sample 200 packets, then count by source IP.
 #   sudo tcpdump -n -i lo -t -c 200 | awk '{print $3}' | cut -d. -f1-4 | sort | uniq -c | sort -nr | head
 echo "   (see the doc; run on your own interface with a small -c sample)"
+
+echo "=== 9) SYN-only: show just connection ATTEMPTS (flag filter) ==="
+# Matches packets with SYN set but ACK not set = the first packet of a handshake.
+# Great for 'who is trying to connect?' without the chatter of established flows.
+#   sudo tcpdump -n -i lo 'tcp[tcpflags] & tcp-syn != 0 and tcp[tcpflags] & tcp-ack == 0'
+
+echo "=== 10) Resets only: spot ports actively refusing (flag filter) ==="
+# A burst of RSTs often means something is hammering a closed port.
+#   sudo tcpdump -n -i lo 'tcp[tcpflags] & tcp-rst != 0'
+
+echo "=== 11) Capture to a file, then rank top talkers from the file (awk pipeline) ==="
+# The real workflow: bounded capture -> read back -> process with lesson-04 tools.
+# Generate traffic in another terminal (curl http://127.0.0.1:8080) while it runs.
+echo "   capture:  sudo tcpdump -n -i lo -c 500 -w $work/cap.pcap port 8080"
+echo "   talkers:  tcpdump -n -r $work/cap.pcap | awk '{print \$3}' | cut -d. -f1-4 | sort | uniq -c | sort -rn | head"
+
+echo "=== 12) Count each TCP flag seen in a saved capture (grep + sort + uniq) ==="
+# SYN storms or RST floods jump out as the big counts. Reads the file from ex. 11.
+echo "   tcpdump -n -r $work/cap.pcap | grep -oE 'Flags \\[[^]]*\\]' | sort | uniq -c | sort -rn"
+
+echo "=== 13) Rotating capture to catch an INTERMITTENT problem (ring buffer) ==="
+# -G 60 new file each 60s, -C 10 cap each at 10MB, -W 5 keep only 5 (disk-safe).
+# Leave running, reproduce the glitch, then analyse the files afterward.
+#   sudo tcpdump -n -i lo -G 60 -C 10 -W 5 -w $work/roll-%H%M%S.pcap port 8080
+
+echo "=== 14) Live tail the wire for one pattern (-l line-buffered into grep) ==="
+# -l makes tcpdump flush each line so grep reacts immediately. Ctrl-C to stop.
+#   sudo tcpdump -l -n -i lo port 8080 | grep --line-buffered 'Flags \\[S\\]'

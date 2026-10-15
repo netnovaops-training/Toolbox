@@ -72,4 +72,54 @@ printf -- '--keep-this\nnormal line\n' > flags.txt
 echo "== lines containing a double dash =="
 grep -- -- flags.txt
 
+# Build a small access-log so the harder examples have realistic data.
+cat > access.log << '__EOF__'
+192.168.1.10 - - [15/Oct/2026:08:01:12] "GET /home" 200 531
+192.168.1.11 - - [15/Oct/2026:08:14:55] "GET /login" 200 220
+192.168.1.10 - - [15/Oct/2026:09:02:01] "POST /login" 401 90
+192.168.1.12 - - [15/Oct/2026:09:33:40] "GET /app" 500 0
+192.168.1.10 - - [15/Oct/2026:09:47:19] "GET /app" 500 0
+192.168.1.11 - - [15/Oct/2026:10:05:00] "GET /home" 200 531
+__EOF__
+
+# --- Context lines around a match (incident triage) ------------------------
+# -C2 shows 2 lines before AND after each match, so you see what led up to it.
+echo "== 500 errors with surrounding context =="
+grep -C2 ' 500 ' access.log
+
+# --- Extract just the matched part with -o ---------------------------------
+# -o prints only what matched, one match per line. -E for the IP regex.
+echo "== every client IP (one per line) =="
+grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' access.log
+
+# --- HARDER + COMBINE: top client IPs (grep | sort | uniq -c | sort -nr) ---
+# grep -o extracts the field; sort groups equal values; uniq -c counts each
+# run; sort -nr ranks by count. The canonical log-ranking pipeline.
+echo "== top client IPs by request count =="
+grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' access.log \
+  | sort | uniq -c | sort -nr
+
+# --- HARDER + COMBINE: count requests per hour -----------------------------
+# grep narrows to real requests; awk pulls the [date:time] field; grep -o grabs
+# the HH; sort|uniq -c tallies. Each stage does one small job.
+echo "== requests per hour =="
+grep '"' access.log \
+  | grep -oE ':[0-9]{2}:' | tr -d ':' \
+  | sort | uniq -c
+
+# --- Quiet test for use in scripts -----------------------------------------
+# -q prints nothing and just sets the exit code. This is how scripts branch.
+echo "== script-style check: are there any 500s? =="
+if grep -q ' 500 ' access.log ; then
+  echo "  yes — $(grep -c ' 500 ' access.log) server errors found"
+else
+  echo "  none"
+fi
+
+# --- Fixed-string search for a literal IP (-F, no regex escaping) ----------
+# -F treats the pattern literally, so the dots are dots, not 'any char'. Faster
+# and safer when the needle is full of regex metacharacters.
+echo "== lines from one exact IP (literal match) =="
+grep -F '192.168.1.10' access.log
+
 echo "Done. Scratch dir removed on exit."

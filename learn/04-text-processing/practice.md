@@ -65,3 +65,45 @@ These are hints, not solutions; lean on each subfolder's `doc.md` and
     about, `awk` to pull a column, `sort | uniq -c | sort -nr` to rank them.
     - Hint: each `|` hands its output to the next tool's input. Build it one
       stage at a time and check the output before adding the next pipe.
+
+## Employment-grade
+
+12. **Top client IPs from an access log (combines grep + sort + uniq).** Make a
+    small fake access log. Extract just the client IP from each line and produce
+    a ranked list of the busiest IPs, most requests first.
+    - Hint: `grep -oE` with an IP regex, then `sort | uniq -c | sort -nr`. Could
+      you do the same extraction with `awk '{print $1}'`? Try both.
+
+13. **Bytes served per IP (awk aggregation).** From the same log, total the
+    bytes column *grouped by* IP (not just a count), then rank it.
+    - Hint: `awk '{ bytes[$1] += $NF } END { for (ip in bytes) print bytes[ip], ip }'`
+      then `sort -nr`. Why can't plain `uniq -c` do this?
+
+14. **Errors per hour (combines grep + awk/cut + sort + uniq).** Count how many
+    error lines fall in each hour of the day.
+    - Hint: `grep` the error level, pull the `HH` out of the timestamp (`awk`,
+      `cut -c`, or `grep -o`), then `sort | uniq -c`.
+
+15. **Safe multi-file config rewrite (combines find + sed/perl).** You have
+    several `.conf` files that all set a port to `8080`. Change it to `9090`
+    across all of them — but *preview* every change first and keep a backup of
+    each file.
+    - Hint: `find ... -print0 | xargs -0 sed -n 's/8080/9090/p'` to preview,
+      then swap to `sed -i.orig` (or `perl -i.orig -pe`) to apply. Never apply
+      before you've read the preview.
+
+16. **Rewrite a line instead of deleting it (capture groups).** In a config,
+    comment out the `max_connections` line while keeping its value visible on
+    the commented line.
+    - Hint: capture the whole line with `()` / `\( \)` and put `# ` before `\1`
+      (sed) or `$1` (perl). Preview with no `-i` first.
+
+17. **Strip a multi-line block (perl slurp mode).** Remove an HTML/XML comment
+    `<!-- ... -->` that spans several lines, writing the result to a new file.
+    - Hint: line-by-line tools can't see across newlines; `perl -0777 -pe
+      's/<!--.*?-->//gs'`. Why does the `?` (non-greedy) matter here?
+
+18. **Poor-man's join (awk two-file trick).** Given an allow-list of IPs in one
+    file and a log in another, print only the log lines whose IP is on the list.
+    - Hint: `awk 'NR==FNR { ok[$1]; next } ($1 in ok)' allow.txt log.txt`. Read
+      the `doc.md` note on `NR` vs `FNR` to see why this works.
