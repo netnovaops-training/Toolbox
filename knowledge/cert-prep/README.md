@@ -1,3 +1,3 @@
 # cert-prep
 
-study notes, cert prep, things I'm working toward
+Cert study notes: Security+ (done), Network+/CCNA, Linux, cloud.
