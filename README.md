@@ -1,21 +1,43 @@
-# Learning lab — Jason A. Gibson
+# Toolbox — Jason A. Gibson
 
-My practice space and the detailed write-ups behind my portfolio.
-**Start with my main portfolio: [Toolbox → PORTFOLIO.md](https://github.com/netnovaops-training/Toolbox/blob/main/PORTFOLIO.md).**
+My working toolbox and study log on the way to an **infrastructure / systems
+engineering** job. I learn by doing: I read something, run it in a lab, break it,
+fix it, and write down what stuck. This repo is that process in the open: the workshop
+behind my portfolio.
 
-What's here:
+**👉 My portfolio: [github.com/netnovaops-training/portfolio](https://github.com/netnovaops-training/portfolio)** — the clean version of my best work. This repo is the workshop behind it.
+**📖 [GUIDE.md](GUIDE.md)** — how everything here works, with copy-paste shortcuts.
 
-- **[Jun's Garden case study](PORTFOLIO.md)** — the deep dive on my biggest project:
-  each piece of work in plain words, with a short engineering note and links to the proof in
-  [garden-for-all](https://github.com/netnovaops-training/garden-for-all).
-- **[LEARNING-LOG.md](LEARNING-LOG.md)** — my early learning notes. New learning is logged as
-  tickets in [Toolbox's logbook](https://github.com/netnovaops-training/Toolbox/blob/main/LOGBOOK.md).
-- **[sandbox/](sandbox/)** — a safe place to practise git, branches, pull requests and GitHub
-  Actions without touching anything real.
+## How I use it
 
-Background: CompTIA Security+. I run a small homelab (a Linux server, a Windows workstation
-and a Raspberry Pi) and use it to learn systems administration, security and DevOps by
-building real things and keeping them running.
+- **Learn in order** → open [`learn/START-HERE.md`](learn/START-HERE.md). It's a
+  timeline: networking first, then the command line, systems, security, and git.
+  Each tool has a doc (*what it is, why it matters on the job*) paired with real,
+  commented commands to run.
+- **Look something up fast** → [`knowledge/cheatsheets/`](knowledge/cheatsheets/).
+- **Reuse my code** → [`code/`](code/) — split into what I wrote and what I found useful.
 
-Focus: troubleshooting, securing and automating the fragile parts so a system stays up
-without babysitting.
+## Layout
+
+| Folder | What's in it |
+|---|---|
+| **learn/** | The lessons, in the order to work through them (START-HERE.md). |
+| **code/** | `mine/` — code I wrote. `useful/` — snippets I collected and reuse (credited). `local/` — my automation scripts (logbook tickets: newentry, worklog, resolve; plus note, rename, folders). |
+| **infra/** | Notes by ops topic: networking, containers, security, os, cloud. |
+| **knowledge/** | Logbook entries (`troubleshooting/`, `installs/`, `projects/`, `learning/`) plus `cheatsheets/`, `notes/`, `documents/`, `cert-prep/`. |
+| **LOGBOOK.md** | Every entry, sorted by date, status, type, language and branch (auto-built). |
+| **OPEN.md** | My live to-do: every ticket I've started and not resolved, with clickable links (auto-built). |
+| **JACKET.md** | Lessons learned, grouped by technology, linked to the work (auto-built). |
+| **ai/** | AI tooling notes (later). |
+| **SKILLS.md** | The bigger skills roadmap toward the job. |
+
+## How I work (the habits I'm building)
+
+- Small, clear **git commits** with real messages — my history is a record of my
+  growth. (See [`knowledge/notes/professional-git.md`](knowledge/notes/professional-git.md).)
+- I run risky things in a **throwaway VM or container**, never on a live box.
+- Copied something? It goes in `SOURCES.md` with its licence.
+- This repo is **public**, so only generic, reusable material lives here — real
+  configs, addresses, and secrets stay private.
+
+Licence: MIT (my work) — see `LICENSE`.
