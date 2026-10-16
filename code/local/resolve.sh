@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# resolve.sh - close the ticket on the current branch: status resolved, closed date,
-# a final work-log line, commit and push. Then you mark the PR ready and merge it.
+# resolve.sh - close a ticket: status resolved, closed date, a final work-log line,
+# commit and push to the work branch. Publish later by merging 'tickets' into main.
 # Usage: bash code/local/resolve.sh ["closing note"]
-#        bash code/local/resolve.sh --file knowledge/projects/2026-10-15-x.md ["note"]
+#        bash code/local/resolve.sh --file dns-typo ["note"]   (pick the ticket by name)
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 . code/local/_entry-lib.sh
@@ -14,13 +14,8 @@ if [ "${1:-}" = "--file" ]; then
 fi
 note="${*:-resolved}"
 
-branch="$(git rev-parse --abbrev-ref HEAD)"
-if [ "$branch" = "main" ]; then
-  echo "You are on main. Switch to the ticket branch first: git switch <type>/<title>"
-  exit 1
-fi
-
-git pull -q --no-edit origin "$branch" 2>/dev/null || true
+use_work_branch
+branch="$WORK_BRANCH"
 entry="$(find_entry "$file")"
 # count XXX placeholders, ignoring anything inside <!-- --> instruction comments
 left="$(awk '/<!--/{c=1} !c && /XXX/{n++} /-->/{c=0} END{print n+0}' "$entry")"
@@ -38,6 +33,6 @@ git add "$entry"
 git commit -q -m "Resolve: $(get_field "$entry" title)"
 git push -q -u origin "$branch"
 echo "Resolved: $entry"
-echo "Last step: open the pull request, click 'Ready for review', then Merge."
-echo "  $(pr_link "$branch")"
-echo "After the merge, LOGBOOK.md and JACKET.md rebuild on main by themselves."
+echo "To publish it: open a pull request from $branch into main and merge it (keep the branch)."
+echo "  $(pr_link)"
+echo "After the merge, LOGBOOK.md, JACKET.md and your portfolio rebuild on main by themselves."

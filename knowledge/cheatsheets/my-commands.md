@@ -10,11 +10,11 @@ runnable things are `.sh`. Run scripts from anywhere in the repo.
 
 ## Logbook tickets
 ```
-bash code/local/newentry.sh <type> <short-title> [tech ...]   # open: branch + entry + push
+bash code/local/newentry.sh <type> <short-title> [tech ...]   # open a ticket (on tickets branch)
 bash code/local/worklog.sh "what I did"                       # save progress (in-progress)
 bash code/local/worklog.sh --blocked "waiting on X"           # parked
-bash code/local/resolve.sh                                    # close it, then merge the PR
-git switch <type>/<short-title> && git pull                   # come back to a ticket
+bash code/local/resolve.sh                                    # close a ticket
+# publish: pull request tickets -> main, Create a merge commit, KEEP the branch
 ```
 Everything open, clickable: `OPEN.md` at the repo root.
 Types: troubleshooting, quick, install, project, learning. Example:

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# newentry.sh - open a logbook ticket: a branch plus a dated entry from the right
-# template, frontmatter filled in, committed and pushed. Never commits to main.
+# newentry.sh - open a logbook ticket: a dated entry from the right template, frontmatter
+# filled in, committed and pushed on the work branch ('tickets'). Never commits to main.
 # Usage: bash code/local/newentry.sh <type> <short-title> [tech ...]
 #   type: troubleshooting | quick | install | project | learning
 #   short-title: lowercase-with-dashes
@@ -38,13 +38,8 @@ if ! printf '%s' "$slug" | grep -Eq '^[a-z0-9][a-z0-9-]*$'; then
 fi
 
 today="$(date +%F)"
-branch="$(git rev-parse --abbrev-ref HEAD)"
-if [ "$branch" = "main" ]; then
-  git pull -q --no-edit
-  branch="$type/$slug"
-  git switch -q -c "$branch"
-  echo "You were on main, so I made a ticket branch: $branch"
-fi
+use_work_branch
+branch="$WORK_BRANCH"
 
 file="knowledge/$dir/$today-$slug.md"
 if [ -e "$file" ]; then
@@ -68,9 +63,8 @@ git commit -q -m "Open $type: $title"
 git push -q -u origin "$branch"
 
 echo ""
-echo "Opened:  $file"
-echo "Branch:  $branch"
+echo "Opened:  $file  (on branch $branch)"
 echo "Next:    fill in the XXX parts. Save progress any time with:"
 echo "           bash code/local/worklog.sh \"what I did\""
-echo "         Open a DRAFT pull request (this is your ticket):"
-echo "           $(pr_link "$branch")"
+echo "         It's listed in OPEN.md within a minute. When you want to publish,"
+echo "         merge $branch into main here:  $(pr_link)"

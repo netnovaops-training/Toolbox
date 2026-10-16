@@ -2,7 +2,7 @@
 
 Project reports: the goal, the steps, the problems hit (linked to troubleshooting entries), the verified result, and a dated work log.
 
-Start one (makes a branch, the entry, and pushes it):
+Start one (adds the entry on the `tickets` branch and pushes it):
 
 ```
 bash code/local/newentry.sh project add-branches-to-flow git github

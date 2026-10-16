@@ -36,8 +36,15 @@ Everything in this repo and how to use it. Written 2026-10-15.
 
 ## 3. The logbook (tickets)
 Every piece of real work gets an entry, and every entry works like a ticket:
-**one entry = one branch = one pull request.** Entries never go straight onto `main`;
-they get there by merging. `LOGBOOK.md` and `JACKET.md` rebuild themselves after each merge.
+**two branches:**
+
+- **`main`** - the finished, public version. Nothing is written to it directly.
+- **`tickets`** - my working branch. Every ticket, fix and note goes here.
+
+When I'm ready to publish, I open a pull request **`tickets` -> `main`** and merge it
+(and keep the `tickets` branch - never click "Delete branch" on it). After the merge,
+`LOGBOOK.md`, `JACKET.md` and my portfolio's Latest work rebuild themselves. The scripts
+below always switch to `tickets` and bring in the latest from `main` for me.
 
 **Pick the type:**
 | Type | Use it for | Folder |
@@ -51,22 +58,23 @@ they get there by merging. `LOGBOOK.md` and `JACKET.md` rebuild themselves after
 **The ticket flow:**
 | Step | Command | What happens |
 |---|---|---|
-| Open | `bash code/local/newentry.sh <type> <short-title> [tech ...]` | Makes branch `<type>/<short-title>` (if I'm on main), the dated entry, pushes it, prints a link. I open a **draft** pull request from that link - that's my open ticket. |
-| Save for the day | `bash code/local/worklog.sh "what I did"` | Adds a dated line to the Work log, status in-progress, pushes. Work is safe even if unfinished. |
-| Come back later | `git switch <type>/<short-title> && git pull` | Pick up where I left off. |
-| Stuck | `bash code/local/worklog.sh --blocked "waiting on X"` | Status blocked. I can still merge so it's on record (shows under Open). |
-| Resolve | `bash code/local/resolve.sh` | Checks no XXX is left, sets resolved + closed date, pushes. Then I click **Ready for review** and **Merge**. |
+| Open | `bash code/local/newentry.sh <type> <short-title> [tech ...]` | Switches to `tickets`, makes the dated entry, pushes it. It shows in OPEN.md within a minute. |
+| Edit | `nano <the entry>` (or edit on GitHub, on the `tickets` branch) | Fill in the XXX parts. |
+| Save for the day | `bash code/local/worklog.sh "what I did"` | Saves my edits, adds a dated line to the Work log, status in-progress, pushes. Safe even if unfinished. If several tickets are open it asks which one (by number), or use `--file <part-of-name>`. |
+| Come back later | just run the scripts again | They switch to `tickets` and pull the latest themselves. |
+| Stuck | `bash code/local/worklog.sh --blocked "waiting on X"` | Status blocked. |
+| Resolve | `bash code/local/resolve.sh` | Checks no XXX is left, sets resolved + closed date, pushes. |
+| Publish | pull request `tickets` -> `main`, then **Create a merge commit** | Resolved tickets appear in LOGBOOK, JACKET and the portfolio. Keep the branch. |
 
 **Show it off:** every project I resolve appears in the "Latest work" section of
 [PORTFOLIO.md](PORTFOLIO.md) by itself (newest 5). For a fix or install worth showing,
 change `showcase: false` to `showcase: true` at the top of the entry.
 
-**See everything I have open:** [OPEN.md](OPEN.md) - rebuilt whenever I push to a ticket branch
+**See everything I have open:** [OPEN.md](OPEN.md) - rebuilt whenever I push to `tickets`
 or a pull request opens, closes or merges. Click a ticket to open it.
 
-**Hit a problem in the middle of a project?** While on the project branch, run
-`newentry.sh troubleshooting ...` - it rides on the same branch and merges with it.
-(`worklog.sh` and `resolve.sh` then need `--file <path>` to know which entry you mean.)
+**Hit a problem in the middle of a project?** Just open another ticket with
+`newentry.sh troubleshooting ...` - it goes on `tickets` too, and both publish together.
 
 **Smaller than a ticket:** a one-line note still goes straight in:
 `bash code/local/note.sh "did a thing #tag"` -> `knowledge/daily-log/quick-notes.md`.
