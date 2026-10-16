@@ -4,9 +4,9 @@ title: leftover merge conflict
 date: 2026-10-16
 branch: tickets
 tech: [github-actions, git]
-status: open
+status: resolved
 opened: 2026-10-16
-closed:
+closed: 2026-10-16
 tags: [merge-conflict, ci, workflow]
 showcase: false
 summary: A merge conflict resolved in the GitHub web editor kept both versions of a workflow step, so the portfolio's Latest work was never saved.
@@ -26,3 +26,4 @@ lesson: When resolving a merge conflict, pick or combine the two sides into one 
 ## Work log
 - 2026-10-16 - opened
 - 2026-10-16 - found both versions in logbook.yml, combined them into one step
+- 2026-10-16 - fixed in logbook.yml
