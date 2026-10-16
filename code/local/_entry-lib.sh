@@ -97,12 +97,20 @@ find_entry() {
     i=$((i + 1))
     printf '  %d) %s  [%s]\n' "$i" "$(get_field "$f" title)" "$(get_field "$f" status)" >&2
   done <<< "$matches"
-  if ! [ -t 0 ] && ! [ -e /dev/tty ]; then
-    echo "Pass the name instead, e.g. --file dns-typo" >&2
+  printf 'Number: ' >&2
+  choice=""
+  if [ -t 0 ]; then
+    read -r choice || true
+  elif { : < /dev/tty; } 2>/dev/null; then
+    read -r choice < /dev/tty || true
+  else
+    read -r choice || true          # answer piped in, e.g.  echo 2 | bash worklog.sh "note"
+  fi
+  if [ -z "$choice" ]; then
+    echo "" >&2
+    echo "No answer. Name the ticket instead, e.g. --file dns-typo" >&2
     return 1
   fi
-  printf 'Number: ' >&2
-  read -r choice < /dev/tty
   if ! printf '%s' "$choice" | grep -Eq '^[0-9]+$' || [ "$choice" -lt 1 ] || [ "$choice" -gt "$n" ]; then
     echo "Not a choice from the list." >&2
     return 1

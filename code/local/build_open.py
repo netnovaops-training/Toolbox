@@ -132,6 +132,16 @@ def build(rows, ready, prs):
                 f"[`{bi.cell(e['ref'])}`]({repo_url('tree', e['ref'])})",
                 ticket_cell(e, prs),
             ]) + " |")
+    out += ["", "## Ready to publish", "",
+            "Resolved on `tickets` but not merged into `main` yet. "
+            f"[Merge tickets into main]({repo_url('compare', 'main...tickets')}?expand=1) "
+            "to publish them.", ""]
+    if not ready:
+        out.append("_Nothing waiting._")
+    else:
+        for e in ready:
+            link = repo_url("blob", e["ref"], e["path"])
+            out.append(f"- [{bi.cell(e['title'])}]({link}) - closed {e.get('closed') or '-'}")
     return "\n".join(out).rstrip() + "\n"
 
 
