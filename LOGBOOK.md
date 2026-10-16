@@ -5,8 +5,8 @@
 Every troubleshooting fix, install, project and learning note I've written up,
 sorted automatically. Each title opens the full write-up.
 
-**4 entries** - 2 projects · 0 installs · 2 troubleshooting · 0 learning notes  
-**2 open** · **2 resolved**
+**5 entries** - 2 projects · 0 installs · 3 troubleshooting · 0 learning notes  
+**2 open** · **3 resolved**
 
 Tickets still being worked on (on their own branches) are listed in [OPEN.md](OPEN.md).
 
@@ -18,6 +18,7 @@ Newest first.
 
 | Date | Type | Title | Tech | Status |
 |---|---|---|---|---|
+| 2026-10-16 | Troubleshooting | [leftover merge conflict](knowledge/troubleshooting/2026-10-16-leftover-merge-conflict.md) | github-actions, git | resolved |
 | 2026-10-15 | Project | [add branches to flow](knowledge/projects/2026-10-15-add-branches-to-flow.md) | git, github | in-progress |
 | 2026-10-15 | Troubleshooting | [Container volume permission denied](knowledge/troubleshooting/2026-10-15-container-volume-permission-denied.md) | docker, linux | resolved |
 | 2026-10-15 | Troubleshooting | [logbook push race](knowledge/troubleshooting/2026-10-15-logbook-push-race.md) | github-actions, git | resolved |
@@ -34,6 +35,7 @@ Newest first.
 
 | Closed | Type | Title | Summary |
 |---|---|---|---|
+| 2026-10-16 | Troubleshooting | [leftover merge conflict](knowledge/troubleshooting/2026-10-16-leftover-merge-conflict.md) | A merge conflict resolved in the GitHub web editor kept both versions of a workflow step, so the portfolio's Latest work was never saved. |
 | 2026-10-15 | Troubleshooting | [Container volume permission denied](knowledge/troubleshooting/2026-10-15-container-volume-permission-denied.md) | A container couldn't write to its bind-mounted volume; fixed a UID mismatch. |
 | 2026-10-15 | Troubleshooting | [logbook push race](knowledge/troubleshooting/2026-10-15-logbook-push-race.md) | After merging PR #3 the logbook rebuild failed to push because another job had updated main a moment earlier. |
 
@@ -50,10 +52,11 @@ Newest first.
 
 _None yet._
 
-### Troubleshooting (2)
+### Troubleshooting (3)
 
 | Date | Title | Tech | Status |
 |---|---|---|---|
+| 2026-10-16 | [leftover merge conflict](knowledge/troubleshooting/2026-10-16-leftover-merge-conflict.md) | github-actions, git | resolved |
 | 2026-10-15 | [Container volume permission denied](knowledge/troubleshooting/2026-10-15-container-volume-permission-denied.md) | docker, linux | resolved |
 | 2026-10-15 | [logbook push race](knowledge/troubleshooting/2026-10-15-logbook-push-race.md) | github-actions, git | resolved |
 
@@ -75,10 +78,11 @@ Every tag - tools, tech and subjects. Click one to see only its entries.
 </details>
 
 <details>
-<summary><b>git</b> (2)</summary>
+<summary><b>git</b> (3)</summary>
 
 | Date | Type | Title | Status |
 |---|---|---|---|
+| 2026-10-16 | Troubleshooting | [leftover merge conflict](knowledge/troubleshooting/2026-10-16-leftover-merge-conflict.md) | resolved |
 | 2026-10-15 | Project | [add branches to flow](knowledge/projects/2026-10-15-add-branches-to-flow.md) | in-progress |
 | 2026-10-15 | Troubleshooting | [logbook push race](knowledge/troubleshooting/2026-10-15-logbook-push-race.md) | resolved |
 
@@ -95,10 +99,11 @@ Every tag - tools, tech and subjects. Click one to see only its entries.
 </details>
 
 <details>
-<summary><b>github-actions</b> (1)</summary>
+<summary><b>github-actions</b> (2)</summary>
 
 | Date | Type | Title | Status |
 |---|---|---|---|
+| 2026-10-16 | Troubleshooting | [leftover merge conflict](knowledge/troubleshooting/2026-10-16-leftover-merge-conflict.md) | resolved |
 | 2026-10-15 | Troubleshooting | [logbook push race](knowledge/troubleshooting/2026-10-15-logbook-push-race.md) | resolved |
 
 </details>
@@ -161,6 +166,17 @@ The git branch each piece of work was done on.
 | Date | Type | Title | Status |
 |---|---|---|---|
 | 2026-10-15 | Project | [portfolio redesign](knowledge/projects/2026-10-15-portfolio-redesign.md) | in-progress |
+
+</details>
+
+<details>
+<summary><code>tickets</code> (1)</summary>
+
+[Open this branch on GitHub](https://github.com/netnovaops-training/Toolbox/tree/tickets)
+
+| Date | Type | Title | Status |
+|---|---|---|---|
+| 2026-10-16 | Troubleshooting | [leftover merge conflict](knowledge/troubleshooting/2026-10-16-leftover-merge-conflict.md) | resolved |
 
 </details>
 

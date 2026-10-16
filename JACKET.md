@@ -5,7 +5,7 @@
 Lessons from real work, rolled up automatically from the [logbook](LOGBOOK.md).
 Each one links to the full write-up and to the branch where the work happened.
 
-**4 lessons** across **6 technologies**.
+**5 lessons** across **6 technologies**.
 
 ## docker
 
@@ -14,6 +14,8 @@ Each one links to the full write-up and to the branch where the work happened.
 
 ## git
 
+- **leftover merge conflict** (2026-10-16) - When resolving a merge conflict, pick or combine the two sides into one - keeping both one after the other leaves dead code that silently does the wrong thing.  
+  [Write-up](knowledge/troubleshooting/2026-10-16-leftover-merge-conflict.md) · [Branch `tickets`](https://github.com/netnovaops-training/Toolbox/tree/tickets)
 - **add branches to flow** (2026-10-15) _(in-progress)_ - Work goes on a branch and reaches main only through a reviewed pull request, so mistakes get caught before they land.  
   [Write-up](knowledge/projects/2026-10-15-add-branches-to-flow.md) · [Branch `project/add-branches-to-flow`](https://github.com/netnovaops-training/Toolbox/tree/project/add-branches-to-flow)
 - **logbook push race** (2026-10-15) - When two automated jobs can push to the same branch, each must pull the latest and retry, or the slower one gets rejected.  
@@ -28,6 +30,8 @@ Each one links to the full write-up and to the branch where the work happened.
 
 ## github-actions
 
+- **leftover merge conflict** (2026-10-16) - When resolving a merge conflict, pick or combine the two sides into one - keeping both one after the other leaves dead code that silently does the wrong thing.  
+  [Write-up](knowledge/troubleshooting/2026-10-16-leftover-merge-conflict.md) · [Branch `tickets`](https://github.com/netnovaops-training/Toolbox/tree/tickets)
 - **logbook push race** (2026-10-15) - When two automated jobs can push to the same branch, each must pull the latest and retry, or the slower one gets rejected.  
   [Write-up](knowledge/troubleshooting/2026-10-15-logbook-push-race.md) · [Branch `troubleshooting/logbook-push-race`](https://github.com/netnovaops-training/Toolbox/tree/troubleshooting/logbook-push-race)
 
