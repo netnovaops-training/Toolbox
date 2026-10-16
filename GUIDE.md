@@ -6,7 +6,7 @@ Everything in this repo and how to use it. Written 2026-10-15.
 - **PC:** `D:\Toolbox`
 - **GitHub:** https://github.com/netnovaops-training/Toolbox
 - **Phone (Termux):** `~/learning-lab/Toolbox`
-- Front page is `README.md`, which links to `PORTFOLIO.md`.
+- Front page is `README.md`. My polished portfolio is its own repo: github.com/netnovaops-training/portfolio.
 - All three copies stay in sync through GitHub: `git pull` to get the latest, `git push` to send yours.
 
 ## The map
@@ -19,7 +19,7 @@ Everything in this repo and how to use it. Written 2026-10-15.
 | `OPEN.md` | Live list of every open ticket (on any branch), each linked to its entry and pull request. Built automatically. |
 | `JACKET.md` | My career jacket: every lesson learned, grouped by technology, linked to the work. Built automatically. |
 | `infra/` | Notes by ops topic (networking, etc.). |
-| `PORTFOLIO.md` | My professional page, browsable by skill. |
+| `PORTFOLIO.md` | Points to my portfolio repo (the showroom). |
 | `TAGS.md` | Click a tag to see every note with it. |
 | `SKILLS.md` | The big skills roadmap. |
 | `GUIDE.md` | This file. |
@@ -66,9 +66,12 @@ below always switch to `tickets` and bring in the latest from `main` for me.
 | Resolve | `bash code/local/resolve.sh` | Checks no XXX is left, sets resolved + closed date, pushes. |
 | Publish | pull request `tickets` -> `main`, then **Create a merge commit** | Resolved tickets appear in LOGBOOK, JACKET and the portfolio. Keep the branch. |
 
-**Show it off:** every project I resolve appears in the "Latest work" section of
-[PORTFOLIO.md](PORTFOLIO.md) by itself (newest 5). For a fix or install worth showing,
-change `showcase: false` to `showcase: true` at the top of the entry.
+**Show it off:** finished work goes to my showroom repo,
+[portfolio](https://github.com/netnovaops-training/portfolio), by itself. Every project I
+resolve counts; for a fix or install worth showing, change `showcase: false` to
+`showcase: true` at the top of the entry. Once it's merged into `main`, the portfolio
+copies it within a day (or right away: portfolio repo -> Actions -> sync-from-toolbox ->
+Run workflow).
 
 **See everything I have open:** [OPEN.md](OPEN.md) - rebuilt whenever I push to `tickets`
 or a pull request opens, closes or merges. Click a ticket to open it.
@@ -93,7 +96,7 @@ show up in **By language** on their own. One word per tag, dashes for two words
 - **`TAGS.md`** — every tag is a clickable live search; click it to see all notes with it. Or type the `#tag` in GitHub's search box. New tags work automatically.
 
 ## 5. Get-hired tools
-- **`PORTFOLIO.md`** — skill menu at top (Networking, Linux, Containers…); each links to proof. Shows "Recent progress" over time.
+- **[portfolio repo](https://github.com/netnovaops-training/portfolio)** — the showroom: projects, latest work and skills. Finished work is copied there daily.
 - **`knowledge/notes/hiring-scorecard.md`** — what employers want, ticked off as I hit it.
 - **`knowledge/notes/professional-git.md`** — how to talk in outcomes, not command lists.
 - **`knowledge/notes/always-do-checklist.md`** — the habits to do every time.
