@@ -5,11 +5,12 @@
 Everything I've started and haven't resolved yet. Rebuilt automatically whenever I
 push to a ticket branch or open, close or merge a pull request.
 
-**2 open tickets** · 0 blocked · resolved work is in the [logbook](LOGBOOK.md)
+**3 open tickets** · 0 blocked · resolved work is in the [logbook](LOGBOOK.md)
 
 Pick one up: `git switch <branch> && git pull`, then `bash code/local/worklog.sh "what I did"`.
 
 | Status | Ticket | Type | Tech | Opened | Last update | Branch | Pull request |
 |---|---|---|---|---|---|---|---|
+| **open** | [leftover merge conflict](https://github.com/netnovaops-training/Toolbox/blob/tickets/knowledge/troubleshooting/2026-10-16-leftover-merge-conflict.md) | Troubleshooting | github-actions, git | 2026-10-16 | 2026-10-16 | [`tickets`](https://github.com/netnovaops-training/Toolbox/tree/tickets) | no PR yet - [open one](https://github.com/netnovaops-training/Toolbox/compare/main...tickets?expand=1) |
 | **in-progress** | [add branches to flow](https://github.com/netnovaops-training/Toolbox/blob/main/knowledge/projects/2026-10-15-add-branches-to-flow.md) | Project | git, github | 2026-10-15 | 2026-10-15 | [`main`](https://github.com/netnovaops-training/Toolbox/tree/main) | merged, still open |
 | **in-progress** | [portfolio redesign](https://github.com/netnovaops-training/Toolbox/blob/main/knowledge/projects/2026-10-15-portfolio-redesign.md) | Project | markdown, github | 2026-10-15 | 2026-10-15 | [`main`](https://github.com/netnovaops-training/Toolbox/tree/main) | merged, still open |
