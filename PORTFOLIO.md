@@ -26,7 +26,7 @@ moved from PHP to Rust and then handed over to its owner to run on his own compu
 ### Toolbox — my working notes, run like a ticket system
 [this repo](README.md)
 
-- Every fix, install and project is a **ticket**: its own branch, a write-up, and a pull request.
+- Every fix, install and project is a **ticket** with a write-up, worked on a branch and merged into `main` through a pull request.
 - A script I built **sorts everything automatically** by topic, language and branch,
   and collects the lessons into one page.
 - A step-by-step **learning path** for networking, Linux, security and git, with runnable examples.

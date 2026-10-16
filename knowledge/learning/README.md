@@ -2,7 +2,7 @@
 
 Notes on something I studied: the key points, what clicked, and the source.
 
-Start one (makes a branch, the entry, and pushes it):
+Start one (adds the entry on the `tickets` branch and pushes it):
 
 ```
 bash code/local/newentry.sh learning swift-basics swift

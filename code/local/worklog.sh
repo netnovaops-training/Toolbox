@@ -3,7 +3,8 @@
 # "## Work log", sets the status, commits and pushes the branch.
 # Usage: bash code/local/worklog.sh "what I did"
 #        bash code/local/worklog.sh --blocked "waiting on X"
-#        bash code/local/worklog.sh --file knowledge/projects/2026-10-15-x.md "note"
+#        bash code/local/worklog.sh --file dns-typo "note"   (pick the ticket by name)
+# With several tickets open and no --file, it asks which one (by number).
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 . code/local/_entry-lib.sh
@@ -23,13 +24,8 @@ if [ -z "$note" ]; then
   exit 1
 fi
 
-branch="$(git rev-parse --abbrev-ref HEAD)"
-if [ "$branch" = "main" ]; then
-  echo "You are on main. Switch to the ticket branch first: git switch <type>/<title>"
-  exit 1
-fi
-
-git pull -q --no-edit origin "$branch" 2>/dev/null || true
+use_work_branch
+branch="$WORK_BRANCH"
 entry="$(find_entry "$file")"
 set_field "$entry" status "$status"
 if [ "$status" = "blocked" ]; then note="blocked: $note"; fi

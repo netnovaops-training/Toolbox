@@ -1,13 +1,13 @@
 name: logbook
 
-# Keeps LOGBOOK.md and JACKET.md in sync with the logbook entries.
+# Keeps LOGBOOK.md, JACKET.md and the "Latest work" part of PORTFOLIO.md in sync with
+# the logbook entries.
 # - On a pull request: checks every entry's frontmatter. A broken entry fails the PR,
 #   so nothing silently drops out of the index. Nothing is written.
-# - On a push to main (after a merge): rebuilds LOGBOOK.md, JACKET.md and the "Latest work"
-#   part of PORTFOLIO.md, and commits
-#   them back if they changed. That bot commit can't re-trigger this workflow:
-#   pushes made with GITHUB_TOKEN never start new workflow runs, the generated files
-#   aren't in the trigger paths, and it only commits when something changed.
+# - On a push to main (after a merge): rebuilds those pages and commits them back if
+#   they changed. That bot commit can't re-trigger this workflow: pushes made with
+#   GITHUB_TOKEN never start new workflow runs, the generated files aren't in the
+#   trigger paths, and it only commits when something changed.
 
 on:
   pull_request:
@@ -52,27 +52,21 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Rebuild LOGBOOK.md and JACKET.md
+      - name: Rebuild LOGBOOK.md, JACKET.md and the portfolio's Latest work
         run: python3 -I code/local/build_index.py
       - name: Commit if changed
         run: |
-          if [ -z "$(git status --porcelain LOGBOOK.md JACKET.md)" ]; then echo "No changes."; exit 0; fi
+          pages="LOGBOOK.md JACKET.md PORTFOLIO.md"
+          # shellcheck disable=SC2086
+          if [ -z "$(git status --porcelain $pages)" ]; then echo "No changes."; exit 0; fi
           git config user.name  "logbook-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add LOGBOOK.md JACKET.md
-          git commit -m "Rebuild logbook index and jacket [skip ci]"
+          # shellcheck disable=SC2086
+          git add $pages
+          git commit -m "Rebuild logbook pages [skip ci]"
           # the open-tickets job may push to main at the same moment: catch up, then retry
           for _ in 1 2 3; do
             git pull --rebase -q origin main && git push origin HEAD:main && exit 0
             sleep 5
           done
           exit 1
-          if [ -n "$(git status --porcelain LOGBOOK.md JACKET.md PORTFOLIO.md)" ]; then
-            git config user.name  "logbook-bot"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add LOGBOOK.md JACKET.md PORTFOLIO.md
-            git commit -m "Rebuild logbook index and jacket [skip ci]"
-            git push
-          else
-            echo "No changes."
-          fi

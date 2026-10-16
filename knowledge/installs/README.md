@@ -2,7 +2,7 @@
 
 Records of setting up or installing something new: what I installed and why, the exact method, how I verified it, and what I learned.
 
-Start one (makes a branch, the entry, and pushes it):
+Start one (adds the entry on the `tickets` branch and pushes it):
 
 ```
 bash code/local/newentry.sh install caddy-reverse-proxy caddy linux

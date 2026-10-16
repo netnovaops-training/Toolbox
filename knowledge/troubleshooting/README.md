@@ -11,15 +11,15 @@ struggled with" into **evidence I can troubleshoot** — the exact thing intervi
 want to hear (see `../notes/professional-git.md`).
 
 ## How to add an entry
-1. Open a ticket (makes a branch + the dated entry, already pushed):
+1. Open a ticket (adds the dated entry on the `tickets` branch, already pushed):
    `bash code/local/newentry.sh troubleshooting short-title docker linux`
    (or `newentry.sh quick ...` for the short Issue / Fix / Learned form).
 2. Fill in the XXX parts while it's fresh. Save progress any day with
    `bash code/local/worklog.sh "what I tried"`.
 3. Keep it **generic and public-safe**: no secrets, no real IPs, no homelab
    specifics. Describe the *shape* of the problem, not my private setup.
-4. When it's fixed: `bash code/local/resolve.sh`, then merge the pull request.
-   It then shows up in [LOGBOOK.md](../../LOGBOOK.md) by itself.
+4. When it's fixed: `bash code/local/resolve.sh`. Once `tickets` is merged into `main`
+   it shows up in [LOGBOOK.md](../../LOGBOOK.md) by itself.
 
 ## Why this works for interviews
 When they ask "tell me about a problem you solved," you open this folder and have
