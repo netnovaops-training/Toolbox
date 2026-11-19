@@ -422,8 +422,12 @@ jobs:
         continue-on-error: true # exits 1 on a finding
         uses: google/osv-scanner-action/osv-scanner-action@b1d267aea5211fa648d9d442fa64b90dbdcbdd36 # v2.7.0
         with:
+          # --allow-no-lockfiles: repos with no lock file (Toolbox, portfolio, jun-photo-backup)
+          # got a "No lockfiles found" warning annotation on every run. With the flag that case
+          # is a clean no-op; the Summary step below already reports it. Added 2026-11-19.
           scan-args: |-
             --recursive
+            --allow-no-lockfiles
             --format=table
             --output=osv.txt
             ./

@@ -195,13 +195,13 @@ def build_logbook(entries):
         f"**{plural(len(entries), 'entry', 'entries')}** - {counts}  ",
         f"**{len(open_rows)} open** · **{len(done_rows)} resolved**",
         "",
-        "Tickets still being worked on (on their own branches) are listed in "
-        "[OPEN.md](OPEN.md).",
+        ("Tickets still being worked on (on their own branches) are listed in "
+        "[OPEN.md](OPEN.md)."),
         "",
-        "Jump to: [Timeline](#timeline) · [Open](#open--ongoing) · "
+        ("Jump to: [Timeline](#timeline) · [Open](#open--ongoing) · "
         "[Resolved](#resolved--completed) · [By type](#by-type) · "
         "[By topic](#by-topic) · [By language](#by-language) · [By branch](#by-branch) · "
-        "[Open tickets](OPEN.md) · [Career jacket](JACKET.md)",
+        "[Open tickets](OPEN.md) · [Career jacket](JACKET.md)"),
         "",
         "## Timeline",
         "",
@@ -261,8 +261,8 @@ def build_jacket(entries):
         "Lessons from real work, rolled up automatically from the [logbook](LOGBOOK.md).",
         "Each one links to the full write-up and to the branch where the work happened.",
         "",
-        f"**{plural(len(lessons), 'lesson')}** across "
-        f"**{plural(len([t for t in techs if t != 'general']), 'technology', 'technologies')}**.",
+        (f"**{plural(len(lessons), 'lesson')}** across "
+        f"**{plural(len([t for t in techs if t != 'general']), 'technology', 'technologies')}**."),
         "",
     ]
     if not lessons:

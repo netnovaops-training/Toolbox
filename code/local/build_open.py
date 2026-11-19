@@ -28,8 +28,11 @@ SKIP = ("README.md", "GUIDELINE.md")
 
 
 def git(*args):
+    # check=False is deliberate and matches the old default: a failed git call
+    # (e.g. git show on a file deleted on that branch) gives empty stdout, which callers treat
+    # as "nothing there". Made explicit for Ruff PLW1510 on 2026-11-19; no behaviour change.
     return subprocess.run(["git", *args], cwd=ROOT, capture_output=True,
-                          text=True, encoding="utf-8").stdout
+                          text=True, encoding="utf-8", check=False).stdout
 
 
 def is_entry(path):
@@ -108,11 +111,11 @@ def build(rows, ready, prs):
         "Everything I've started and haven't resolved yet. Rebuilt automatically whenever I",
         "push to the `tickets` branch or open, close or merge a pull request.",
         "",
-        f"**{bi.plural(len(rows), 'open ticket')}** · {blocked} blocked · "
-        f"{len(ready)} ready to publish · published work is in the [logbook](LOGBOOK.md)",
+        (f"**{bi.plural(len(rows), 'open ticket')}** · {blocked} blocked · "
+        f"{len(ready)} ready to publish · published work is in the [logbook](LOGBOOK.md)"),
         "",
-        "Work on one: `bash code/local/worklog.sh \"what I did\"` "
-        "(it switches to `tickets` and asks which ticket).",
+        ("Work on one: `bash code/local/worklog.sh \"what I did\"` "
+        "(it switches to `tickets` and asks which ticket)."),
         "",
     ]
     if not rows:
@@ -133,9 +136,9 @@ def build(rows, ready, prs):
                 ticket_cell(e, prs),
             ]) + " |")
     out += ["", "## Ready to publish", "",
-            "Resolved on `tickets` but not merged into `main` yet. "
+            ("Resolved on `tickets` but not merged into `main` yet. "
             f"[Merge tickets into main]({repo_url('compare', 'main...tickets')}?expand=1) "
-            "to publish them.", ""]
+            "to publish them."), ""]
     if not ready:
         out.append("_Nothing waiting._")
     else:
